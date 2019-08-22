@@ -1,0 +1,22 @@
+@media screen and (min-width: 600px) {
+  .wrapper {
+    background-color: green !important;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .wrapper {
+    background-color: yellow !important;
+    display: grid;
+    grid-template-columns: 50px repeat(2, 1fr) 50px;
+    grid-template-rows: repeat(3, 1fr);
+  }
+
+  .doodle__title::before {
+    content: "Make a";
+    transform: translate(120%, 50px);
+    position: absolute;
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}

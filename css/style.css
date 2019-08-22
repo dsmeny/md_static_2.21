@@ -1,0 +1,228 @@
+@import url(normalize.css);
+@import url(responsive.css);
+
+:root {
+  --content-font: "Rubik", sans-serif;
+  --title-font: "Amatic SC", cursive;
+  --main-color: rgb(100, 205, 255);
+  --border-color: rgba(106, 118, 124, 0.3);
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+body {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.doodle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  background-color: yellow;
+  height: 20vh;
+  box-shadow: 1px 20px 20px rgba(0, 0, 0, 0.02);
+}
+
+.--moveToOrigin {
+  animation-name: doodleAnim;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.--setMessage {
+  font-size: 2rem;
+  outline: none;
+}
+
+.--addCentering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.--styleInputs {
+  background-color: transparent;
+  border: none;
+  text-align: left;
+}
+
+.--styleLists {
+  list-style-type: none;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 5vw;
+  padding-left: 5vw;
+}
+
+.--styleLists:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+
+.--addAnimation {
+  animation-name: messageAnimation;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  margin: 0 auto;
+}
+
+@keyframes doodleAnim {
+  from {
+    transform: translateY(0vh);
+  }
+  to {
+    transform: translateY(-10vh);
+  }
+}
+
+.doodle__title {
+  font-family: "Barriecito", cursive;
+  font-size: 3rem;
+  width: 30%;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
+.doodle__buttons {
+  width: 40%;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.doodle__message {
+  font-size: 2.4rem;
+  font-family: var(--title-font);
+  font-weight: 100;
+  color: var(--main-color);
+  border: 1px solid var(--border-color);
+  word-break: break-all;
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+
+@keyframes messageAnimation {
+  from {
+    width: 40vw;
+  }
+  to {
+    width: 93vw;
+  }
+}
+
+.doodle__items::before {
+  content: "this is a test";
+  position: absolute;
+  z-index: 9999;
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  top: 30px;
+  left: 100px;
+}
+
+.doodle__items {
+  font-family: var(--content-font);
+  font-size: 1.2rem;
+  font-weight: 100;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  border-radius: 40px;
+  color: charcoal;
+  margin-top: 10px;
+}
+
+.--setMessage:nth-child(2) {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.--setMessage:nth-child(1) {
+  grid-row: 1;
+  grid-column: 1;
+  grid-column: 1 / span 2;
+}
+
+.listView {
+  font-size: 1rem;
+  font-family: var(--content-font);
+  position: relative;
+  top: 2vh;
+  width: 100%;
+}
+
+.--emptyStorage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 7vh;
+  font-family: var(--content-font);
+  font-size: 1rem;
+  width: 100%;
+  animation-name: emptyStorageAnimation;
+  animation-duration: 1s;
+  animation-delay: 0.7s;
+  animation-fill-mode: both;
+}
+
+@keyframes emptyStorageAnimation {
+  from {
+    transform: translateY(-10vh);
+    height: 0vh;
+    color: rgba(68, 182, 144, 0);
+  }
+  to {
+    transform: translateY(5vh);
+    height: 7vh;
+    color: rgba(68, 182, 144, 0.8);
+  }
+}
+
+.tileView {
+  font-size: 1.3rem;
+  line-height: 3rem;
+  width: 96%;
+  padding-inline-start: unset;
+}
+
+.tileView li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  background-color: yellow;
+  text-align: center;
+  margin: 10px;
+}
+
+.removeStorage {
+  border: none;
+  font-size: 1rem;
+  color: rgb(102, 206, 255);
+  border: 1px solid rgb(102, 206, 255);
+  border-radius: 50px;
+  font-weight: 500;
+}
+
+.--typed {
+  font-family: var(--content-font);
+  color: var(--main-color);
+  font-size: 1.6rem;
+  font-weight: 100;
+}
