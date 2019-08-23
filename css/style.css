@@ -86,7 +86,7 @@ body {
 
 .--addFlex {
   display: flex !important;
-  margin-right: 6vw;
+  margin-right: 12vw;
 }
 
 @keyframes doodleAnim {

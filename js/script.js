@@ -142,7 +142,8 @@ window.addEventListener("DOMContentLoaded", e => {
     applyView(clicked);
     setClickListeners();
     //
-    doodleButtons.classList.remove("--addFlex");
+    if (doodleButtons.classList.contains("--addFlex"))
+      doodleButtons.classList.remove("--addFlex");
   } else {
     doodleHeader.insertAdjacentHTML(
       "afterend",
@@ -151,7 +152,8 @@ window.addEventListener("DOMContentLoaded", e => {
 
     showTileStorage.style.display = "none";
     showListStorage.style.display = "none";
-    doodleButtons.classList.add("--addFlex");
+    let watch = window.matchMedia("(max-width: 600px)");
+    if (watch.matches) doodleButtons.classList.add("--addFlex");
   }
 
   message.focus();
