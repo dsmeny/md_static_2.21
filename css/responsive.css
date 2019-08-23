@@ -1,15 +1,35 @@
 @media screen and (min-width: 600px) {
-  .wrapper {
-    background-color: green !important;
+  .--setMessage:nth-child(1) {
+    font-size: 3rem !important;
+    grid-column: 1 / span 4 !important;
+  }
+  .--setMessage:nth-child(2) {
+    grid-column: 2 !important;
+  }
+
+  .--setMessage:nth-child(3) {
+    grid-column: 3 !important;
+  }
+
+  .doodle__buttons {
+    grid-template-columns: 1fr 1fr 1fr 1fr !important;
   }
 }
 
 @media screen and (min-width: 1000px) {
   .wrapper {
-    background-color: yellow !important;
+    background-color: blue !important;
     display: grid;
-    grid-template-columns: 50px repeat(2, 1fr) 50px;
+    grid-template-columns: 50px repeat(4, 1fr) 50px;
     grid-template-rows: repeat(3, 1fr);
+  }
+
+  .doodle {
+    grid-column: 1 / span 6 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr !important;
+    padding-right: 50px !important;
+    padding-left: 50px !important;
   }
 
   .doodle__title::before {

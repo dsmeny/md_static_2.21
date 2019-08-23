@@ -11,7 +11,6 @@ const dom = {
   showTileStorage: q("#show__tile__Storage"),
   showListStorage: q("#show__list__Storage"),
   logo: q(".doodle__title"),
-  doodleItems: q(".doodle__items"),
   doodleButtons: q(".doodle__buttons")
 };
 const {
@@ -23,14 +22,20 @@ const {
   showTileStorage,
   showListStorage,
   logo,
-  doodleItems,
   doodleButtons
 } = dom;
 
+let clicked = localStorage.getItem("clicked");
 let defValue = message.defaultValue;
-let clicked = true;
-localStorage.clicked = clicked;
 let storage = localStorage;
+let itemsList;
+
+//***** ******/
+// on resize
+//***** ******/
+
+// media query for logo resizing
+window.addEventListener("resize", matchMobile);
 
 //***** ******/
 // on keypress
@@ -44,7 +49,7 @@ message.addEventListener("keydown", e => {
   messageInput.classList.add("--typed");
   messageInput.classList.add("--addAnimation");
   messageInput.defaultValue = " ";
-  messageInput.style.transform = "translateY(4vh)";
+  messageInput.style.transform = "translateY(5vh)";
 
   // message input buttons
   ///////////
@@ -66,6 +71,7 @@ message.addEventListener("keydown", e => {
   // if the enter button is selected
   if (e.keyCode === 13) {
     let html = messageInput.value;
+    doodleButtons.classList.remove("--addFlex");
 
     // return everything as before
     doodleHeader.classList.remove("--moveToOrigin");
@@ -83,18 +89,24 @@ message.addEventListener("keydown", e => {
 
       let getStorageItem = localStorage.getItem(html);
 
+      // remove empty storage message
+      const emptyStorage = q(".--emptyStorage");
+      if (wrapper.children[1].classList.contains("--emptyStorage")) {
+        emptyStorage.style.display = "none";
+        resetInput();
+      }
+
+      // send to the UI
+
+      sendToPage(getStorageItem);
+      applyView(clicked);
+
       // Show tile and list buttons
       showTileStorage.style.display = "inline-block";
       showListStorage.style.display = "inline-block";
+      setClickListeners();
 
-      // remove empty storage message
-      const emptyStorage = q(".--emptyStorage");
-      if (wrapper.children[1].classList.contains("--emptyStorage"))
-        emptyStorage.style.display = "none";
-      resetInput();
-
-      // send to the UI
-      sendToPage(getStorageItem);
+      //
     } else {
       resetInput();
       message.value = defValue;
@@ -115,9 +127,9 @@ message.addEventListener("click", e => {
 
 window.addEventListener("DOMContentLoaded", e => {
   // changes logo appearance
-  let ev = window.matchMedia("(max-width: 600px)");
-  matchMobile(ev);
+  matchMobile();
 
+  // If there is storage
   if (storage.length > 1) {
     let storageArray = Array.from(Object.keys(storage));
     storageArray.forEach(store => {
@@ -125,11 +137,21 @@ window.addEventListener("DOMContentLoaded", e => {
         sendToPage(store);
       }
     });
+
+    // set view state and add listeners
+    applyView(clicked);
+    setClickListeners();
+    //
+    doodleButtons.classList.remove("--addFlex");
   } else {
     doodleHeader.insertAdjacentHTML(
       "afterend",
       `<h2 class='--emptyStorage'>Your storage is currently empty. Make a doodle!</h2>`
     );
+
+    showTileStorage.style.display = "none";
+    showListStorage.style.display = "none";
+    doodleButtons.classList.add("--addFlex");
   }
 
   message.focus();
@@ -164,8 +186,10 @@ function removeStorage(e) {
 }
 
 // media query for mobile
-function matchMobile(e) {
-  if (e.matches || visualViewport.width < 600) {
+function matchMobile() {
+  let watch = window.matchMedia("(max-width: 600px)");
+
+  if (watch.matches) {
     logo.innerText = "MD";
   } else {
     logo.innerText = "Morning Doodle";
@@ -180,7 +204,7 @@ function resetInput() {
   }
 }
 
-function* showView(storObj) {
+function* createList(storObj) {
   // create the html
   yield `<li class='--styleLists'>
         <label>${storObj}</label>
@@ -202,7 +226,7 @@ function* generateList(oneItem) {
   // show view depending on selected button
 
   if (oneItem !== "clicked") {
-    generator = showView(oneItem);
+    generator = createList(oneItem);
     html += generator.next().value;
   }
 
@@ -218,17 +242,25 @@ function* generateList(oneItem) {
 function displayList(elem) {
   // set the view
   let view;
-  if (clicked) {
+  if (clicked === "true") {
     view = "listView";
-  } else {
+  } else if (clicked === "false") {
     view = "tileView";
+  } else {
+    console.log("undefined. view is not set.");
   }
 
   // insert the list
-  content.insertAdjacentHTML(
-    "afterbegin",
-    `<ul id="itemsList" class='${view}'>${elem}</ul>`
-  );
+  if (content.contains(itemsList)) {
+    itemsList.innerHTML += elem;
+  } else {
+    content.insertAdjacentHTML(
+      "afterbegin",
+      `<ul id="itemsList" class='${view}'>${elem}</ul>`
+    );
+
+    itemsList = q("#itemsList");
+  }
 }
 
 function sendToPage(item) {
@@ -236,4 +268,31 @@ function sendToPage(item) {
   let listElement = generator.next().value;
   displayList(listElement);
   generator.next();
+}
+
+function setClickListeners() {
+  doodleButtons.addEventListener("click", e => {
+    if (e.target === showListStorage) {
+      clicked = "true";
+      localStorage.setItem("clicked", true);
+      applyView(clicked);
+    } else if (e.target === showTileStorage) {
+      clicked = "false";
+      localStorage.setItem("clicked", false);
+      applyView(clicked);
+    }
+  });
+}
+
+function applyView(viewState) {
+  // determine view defaults
+  if (viewState === "true") {
+    showListStorage.classList.add("--addDimmer");
+    showTileStorage.classList.remove("--addDimmer");
+    itemsList.classList.replace("tileView", "listView");
+  } else if (viewState === "false") {
+    showListStorage.classList.remove("--addDimmer");
+    showTileStorage.classList.add("--addDimmer");
+    itemsList.classList.replace("listView", "tileView");
+  }
 }
