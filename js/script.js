@@ -162,7 +162,7 @@ window.addEventListener("DOMContentLoaded", e => {
   } else {
     doodleHeader.insertAdjacentHTML(
       "afterend",
-      `<h2 class='--emptyStorage'>Your storage is currently empty. Make a doodle!</h2>`
+      `<h2 class='--emptyStorage'>Make a nice doodle!</h2>`
     );
 
     showTileStorage.style.display = "none";
