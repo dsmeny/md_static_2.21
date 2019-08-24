@@ -1,6 +1,8 @@
 @import url(normalize.css);
 @import url(responsive.css);
 
+/* amended */
+
 :root {
   --content-font: "Rubik", sans-serif;
   --title-font: "Amatic SC", cursive;

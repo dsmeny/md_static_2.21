@@ -2,6 +2,8 @@ function q(selector) {
   return document.querySelector(selector);
 }
 
+// amended
+
 const dom = {
   wrapper: q(".wrapper"),
   doodleHeader: q(".doodle"),
