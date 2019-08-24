@@ -53,11 +53,6 @@ doodleHeader.addEventListener("touchstart", e => {
   doodleHeader.scrollTo = 0 + "px";
 });
 
-doodleButtons.addEventListener("touchstart", e => {
-  e.preventDefault();
-  message.style.color = "red";
-});
-
 //***** ******/
 // on scrolled
 //***** ******/
@@ -310,6 +305,19 @@ function sendToPage(item) {
 
 function setClickListeners() {
   doodleButtons.addEventListener("click", e => {
+    if (e.target === showListStorage) {
+      clicked = "true";
+      localStorage.setItem("clicked", true);
+      applyView(clicked);
+    } else if (e.target === showTileStorage) {
+      clicked = "false";
+      localStorage.setItem("clicked", false);
+      applyView(clicked);
+      adjustToScrolled("--adjustWrapperHeight");
+    }
+  });
+
+  doodleButtons.addEventListener("touchstart", e => {
     if (e.target === showListStorage) {
       clicked = "true";
       localStorage.setItem("clicked", true);
