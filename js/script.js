@@ -44,9 +44,26 @@ const observer = new MutationObserver(callback);
 observer.observe(wrapper, { subtree: true, childList: true });
 
 //***** ******/
+// mobile touch
+//***** ******/
+
+// User touch
+doodleHeader.addEventListener("touchstart", e => {
+  e.preventDefault();
+  doodleHeader.scrollTo = 0 + "px";
+});
+
+doodleButtons.addEventListener("touchstart", e => {
+  e.preventDefault();
+  message.style.color = "red";
+});
+
+//***** ******/
 // on scrolled
 //***** ******/
+
 adjustToScrolled("--adjustWrapperHeight");
+
 //***** ******/
 // on resize
 //***** ******/
