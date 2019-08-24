@@ -2,8 +2,6 @@ function q(selector) {
   return document.querySelector(selector);
 }
 
-// amended
-
 const dom = {
   wrapper: q(".wrapper"),
   doodleHeader: q(".doodle"),
@@ -97,7 +95,6 @@ message.addEventListener("keydown", e => {
     messageInput.classList.remove("--typed");
     messageInput.classList.remove("--addAnimation");
     messageInput.style.transform = "none";
-    doodleButtons.style.width = "40%";
     doodleButtons.style.margin = "initial";
     logo.style.display = "initial";
 
