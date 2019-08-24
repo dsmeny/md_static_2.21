@@ -43,7 +43,7 @@ body {
 }
 
 .--setMessage {
-  font-size: 2rem;
+  font-size: 2rem !important;
   outline: none;
 }
 
@@ -84,9 +84,37 @@ body {
   opacity: 0.4 !important;
 }
 
+.--adjustWrapperHeight {
+  height: 90vh !important;
+}
+
 .--addFlex {
   display: flex !important;
   margin-right: 12vw;
+}
+
+.--sticky--header {
+  height: 4rem;
+  transform: translate(0%, 0%) !important;
+  margin: 0;
+  position: fixed;
+  left: 0;
+  transform: none;
+  box-shadow: 1px 3px 720px rgba(0, 0, 0, 0.4);
+  animation-name: headerAnimation;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+@keyframes headerAnimation {
+  from {
+    height: 0rem;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    height: 4rem;
+  }
 }
 
 @keyframes doodleAnim {
@@ -148,7 +176,7 @@ input:focus {
 
 .doodle__items {
   font-family: var(--content-font);
-  font-size: 1.2rem;
+  font-size: 1.2rem !important;
   font-weight: 100;
   width: 100%;
   padding: 5px;
@@ -235,4 +263,17 @@ input:focus {
   color: var(--main-color);
   font-size: 1.6rem;
   font-weight: 100;
+}
+
+footer {
+  font-size: 1.255rem;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  font-weight: 100;
+  color: rgba(48, 49, 49, 0.7);
+}
+
+.heart {
+  color: red;
+  font-size: 1rem;
 }

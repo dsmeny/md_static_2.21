@@ -31,6 +31,23 @@ let storage = localStorage;
 let itemsList;
 
 //***** ******/
+// Observer
+//***** ******/
+
+const callback = () => {
+  wrapper.style.height =
+    Math.round(Math.floor(window.outerHeight * 1.5)) + "px";
+};
+
+const observer = new MutationObserver(callback);
+
+observer.observe(wrapper, { subtree: true, childList: true });
+
+//***** ******/
+// on scrolled
+//***** ******/
+adjustToScrolled("--adjustWrapperHeight");
+//***** ******/
 // on resize
 //***** ******/
 
@@ -128,6 +145,7 @@ message.addEventListener("click", e => {
 window.addEventListener("DOMContentLoaded", e => {
   // changes logo appearance
   matchMobile();
+  adjustToScrolled("--adjustWrapperHeight");
 
   // If there is storage
   if (storage.length > 1) {
@@ -142,8 +160,6 @@ window.addEventListener("DOMContentLoaded", e => {
     applyView(clicked);
     setClickListeners();
     //
-    if (doodleButtons.classList.contains("--addFlex"))
-      doodleButtons.classList.remove("--addFlex");
   } else {
     doodleHeader.insertAdjacentHTML(
       "afterend",
@@ -153,7 +169,11 @@ window.addEventListener("DOMContentLoaded", e => {
     showTileStorage.style.display = "none";
     showListStorage.style.display = "none";
     let watch = window.matchMedia("(max-width: 600px)");
-    if (watch.matches) doodleButtons.classList.add("--addFlex");
+    if (watch.matches) {
+      doodleButtons.classList.add("--addFlex");
+    } else if (doodleButtons.classList.contains("--addFlex")) {
+      doodleButtons.classList.remove("--addFlex");
+    }
   }
 
   message.focus();
@@ -282,6 +302,7 @@ function setClickListeners() {
       clicked = "false";
       localStorage.setItem("clicked", false);
       applyView(clicked);
+      adjustToScrolled("--adjustWrapperHeight");
     }
   });
 }
@@ -296,5 +317,24 @@ function applyView(viewState) {
     showListStorage.classList.remove("--addDimmer");
     showTileStorage.classList.add("--addDimmer");
     itemsList.classList.replace("listView", "tileView");
+  }
+}
+
+function scrolled() {
+  if (window.scrollY >= 50) {
+    document.body.style.paddingTop = 0.3 + "px";
+    doodleHeader.classList.add("--sticky--header");
+  } else {
+    document.body.style.paddingTop = 0;
+    doodleHeader.classList.remove("--sticky--header");
+  }
+}
+
+function adjustToScrolled(wClass) {
+  if (clicked === "true") {
+    wrapper.classList.add(wClass);
+  } else {
+    wrapper.classList.remove(wClass);
+    window.addEventListener("scroll", scrolled);
   }
 }
