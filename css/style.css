@@ -26,6 +26,14 @@ body {
   height: 100%;
   margin: 0 auto;
   overflow:hidden;
+
+}
+
+ul, menu, dir {
+  list-style-type: none;
+  -webkit-margin-before: none;
+  -webkit-margin-after: none;
+  -webkit-padding-start: none;
 }
 
 .content{
@@ -277,6 +285,8 @@ footer {
   text-align: center;
   font-weight: var(--weight-content);
   color: var(--para-color);
+  position: relative;
+  top: -5vh;
 }
 
 .heart {
