@@ -97,6 +97,7 @@ h2 {
 
 .--adjustWrapperHeight {
   height: 90vh !important;
+  background-color: red;
 }
 
 .--addFlex {
