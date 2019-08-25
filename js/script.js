@@ -44,16 +44,6 @@ const observer = new MutationObserver(callback);
 observer.observe(wrapper, { subtree: true, childList: true });
 
 //***** ******/
-// mobile touch
-//***** ******/
-
-// User touch
-doodleHeader.addEventListener("touchstart", e => {
-  e.preventDefault();
-  doodleHeader.scrollTo = 0 + "px";
-});
-
-//***** ******/
 // on scrolled
 //***** ******/
 
@@ -78,7 +68,6 @@ message.addEventListener("keydown", e => {
   messageInput.classList.add("--typed");
   messageInput.classList.add("--addAnimation");
   messageInput.defaultValue = " ";
-  messageInput.style.transform = "translateY(5vh)";
 
   // message input buttons
   ///////////
@@ -101,6 +90,7 @@ message.addEventListener("keydown", e => {
   if (e.keyCode === 13) {
     let html = messageInput.value;
     doodleButtons.classList.remove("--addFlex");
+    doodleButtons.classList.remove("--addCentering");
 
     // return everything as before
     doodleHeader.classList.remove("--moveToOrigin");
@@ -328,6 +318,11 @@ function setClickListeners() {
       applyView(clicked);
       adjustToScrolled("--adjustWrapperHeight");
     }
+  });
+
+  doodleHeader.addEventListener("touchstart", e => {
+    e.preventDefault();
+    doodleHeader.scrollTo = 0 + "px";
   });
 }
 

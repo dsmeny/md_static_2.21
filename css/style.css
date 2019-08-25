@@ -14,7 +14,7 @@ body,
 html {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 100%;
   font-size: calc(16px + 1vw);
 }
 
@@ -23,8 +23,13 @@ body {
 }
 
 .wrapper {
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
+  overflow:hidden;
+}
+
+.content{
+ max-width: 100%;
 }
 
 h2 {
@@ -54,7 +59,7 @@ h2 {
 }
 
 .--addCentering {
-  display: flex;
+  display: flex !important;
   justify-content: center;
   align-items: center;
 }
@@ -129,7 +134,7 @@ h2 {
     transform: translateY(0vh);
   }
   to {
-    transform: translateY(-10vh);
+    transform: translateY(-3vh);
   }
 }
 
