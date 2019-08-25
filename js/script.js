@@ -34,18 +34,18 @@ let itemsList;
 // Observer
 //***** ******/
 
-const callback = () => {
-  wrapper.style.height =
-    Math.round(Math.floor(window.outerHeight * 1.5)) + "px";
-};
+// const callback = () => {
+//   wrapper.style.height =
+//     Math.round(Math.floor(window.outerHeight * 1.5)) + "px";
+// };
 
-const observer = new MutationObserver(callback);
+// const observer = new MutationObserver(callback);
 
-observer.observe(wrapper, {
-  subtree: true,
-  childList: true,
-  characterData: true
-});
+// observer.observe(wrapper, {
+//   subtree: true,
+//   childList: true,
+//   characterData: true
+// });
 
 //***** ******/
 // on scrolled
