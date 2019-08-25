@@ -78,7 +78,13 @@ h2 {
   text-align: left;
 }
 
+.--addFooterPosition {
+  position: relative;
+  top: -5vh;
+}
+
 .--styleLists {
+  font-family: var(--content-font);
   list-style-type: none;
   height: 4rem;
   display: flex;
@@ -86,6 +92,7 @@ h2 {
   align-items: center;
   padding-right: 5vw;
   padding-left: 5vw;
+  line-height: 1.5rem;
 }
 
 .--styleLists:nth-child(odd) {
@@ -170,6 +177,7 @@ input:focus {
   border: 1px solid var(--border-color);
   word-break: break-all;
   padding: 8px;
+  border-radius: 40px;
 }
 
 @keyframes messageAnimation {
@@ -249,7 +257,6 @@ input:focus {
 }
 
 .tileView {
-  line-height: 3rem;
   padding-inline-start: unset;
 }
 
@@ -284,8 +291,7 @@ footer {
   text-align: center;
   font-weight: var(--weight-content);
   color: var(--para-color);
-  position: relative;
-  top: -5vh;
+ 
 }
 
 .heart {

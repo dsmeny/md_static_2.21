@@ -11,7 +11,8 @@ const dom = {
   showTileStorage: q("#show__tile__Storage"),
   showListStorage: q("#show__list__Storage"),
   logo: q(".doodle__title"),
-  doodleButtons: q(".doodle__buttons")
+  doodleButtons: q(".doodle__buttons"),
+  footer: q("footer")
 };
 const {
   wrapper,
@@ -22,30 +23,14 @@ const {
   showTileStorage,
   showListStorage,
   logo,
-  doodleButtons
+  doodleButtons,
+  footer
 } = dom;
 
 let clicked = localStorage.getItem("clicked");
 let defValue = message.defaultValue;
 let storage = localStorage;
 let itemsList;
-
-//***** ******/
-// Observer
-//***** ******/
-
-// const callback = () => {
-//   wrapper.style.height =
-//     Math.round(Math.floor(window.outerHeight * 1.5)) + "px";
-// };
-
-// const observer = new MutationObserver(callback);
-
-// observer.observe(wrapper, {
-//   subtree: true,
-//   childList: true,
-//   characterData: true
-// });
 
 //***** ******/
 // on scrolled
@@ -336,10 +321,12 @@ function applyView(viewState) {
     showListStorage.classList.add("--addDimmer");
     showTileStorage.classList.remove("--addDimmer");
     itemsList.classList.replace("tileView", "listView");
+    footer.classList.add("--addFooterPosition");
   } else if (viewState === "false") {
     showListStorage.classList.remove("--addDimmer");
     showTileStorage.classList.add("--addDimmer");
     itemsList.classList.replace("listView", "tileView");
+    footer.classList.remove("--addFooterPosition");
   }
 }
 
