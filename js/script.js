@@ -41,7 +41,11 @@ const callback = () => {
 
 const observer = new MutationObserver(callback);
 
-observer.observe(wrapper, { subtree: true, childList: true });
+observer.observe(wrapper, {
+  subtree: true,
+  childList: true,
+  characterData: true
+});
 
 //***** ******/
 // on scrolled
