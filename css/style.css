@@ -38,6 +38,9 @@ ul, menu, dir {
 
 .content{
  max-width: 100%;
+ background: #ECE9E6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 h2 {
@@ -49,7 +52,11 @@ h2 {
   justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap;
-  background-color: yellow;
+  background: #fffc00;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #ffffff, #fffc00);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #ffffff, #fffc00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+
   height: 20vh;
   box-shadow: 1px 20px 20px rgba(0, 0, 0, 0.02);
   padding-right: 10px;
@@ -66,6 +73,10 @@ h2 {
   outline: none;
 }
 
+.--active{
+  color: red;
+}
+
 .--addCentering {
   display: flex !important;
   justify-content: center;
@@ -76,11 +87,6 @@ h2 {
   background-color: transparent;
   border: none;
   text-align: left;
-}
-
-.--addFooterPosition {
-  position: relative;
-  top: -5vh;
 }
 
 .--styleLists {
@@ -178,6 +184,7 @@ input:focus {
   word-break: break-all;
   padding: 8px;
   border-radius: 40px;
+  background-color: #fff;
 }
 
 @keyframes messageAnimation {
@@ -188,17 +195,6 @@ input:focus {
     width: 93vw;
   }
 }
-
-/* .doodle__items::before {
-  content: "this is a test";
-  position: absolute;
-  z-index: 9999;
-  height: 100px;
-  width: 100px;
-  background-color: red;
-  top: 30px;
-  left: 100px;
-} */
 
 .doodle__items {
   font-family: var(--content-font);
@@ -291,7 +287,11 @@ footer {
   text-align: center;
   font-weight: var(--weight-content);
   color: var(--para-color);
- 
+  box-shadow: 3px -50px 89px rgba(0,0,0,0.17);
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  background-color: #fff;
 }
 
 .heart {

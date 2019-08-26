@@ -12,9 +12,9 @@ const dom = {
   showListStorage: q("#show__list__Storage"),
   logo: q(".doodle__title"),
   doodleButtons: q(".doodle__buttons"),
-  footer: q("footer")
+  styleLists: q(".--styleLists")
 };
-const {
+let {
   wrapper,
   doodleHeader,
   message,
@@ -24,13 +24,14 @@ const {
   showListStorage,
   logo,
   doodleButtons,
-  footer
+  styleLists
 } = dom;
 
 let clicked = localStorage.getItem("clicked");
 let defValue = message.defaultValue;
 let storage = localStorage;
 let itemsList;
+let mobileWatch = mobileWatcher();
 
 //***** ******/
 // on scrolled
@@ -43,7 +44,8 @@ adjustToScrolled("--adjustWrapperHeight");
 //***** ******/
 
 // media query for logo resizing
-window.addEventListener("resize", matchMobile);
+
+window.addEventListener("resize", setLogoView(mobileWatch));
 
 //***** ******/
 // on keypress
@@ -90,7 +92,7 @@ message.addEventListener("keydown", e => {
     logo.style.display = "initial";
 
     // If value is not a space
-    if (html !== " ") {
+    if (html !== " " && html !== "") {
       // Add to localStorage
       localStorage.setItem(`${html}`, html);
 
@@ -134,7 +136,7 @@ message.addEventListener("click", e => {
 
 window.addEventListener("DOMContentLoaded", e => {
   // changes logo appearance
-  matchMobile();
+  setLogoView(mobileWatch);
   adjustToScrolled("--adjustWrapperHeight");
 
   // If there is storage
@@ -172,10 +174,12 @@ window.addEventListener("DOMContentLoaded", e => {
 // remove buttons
 function* removeOneElement(node) {
   let clicklist = () => {
-    if (node.hasChildNodes()) {
-      let nList = Array.from(node.childNodes);
+    if (itemsList.hasChildNodes()) {
+      let nList = Array.from(itemsList.childNodes);
+
       nList.forEach(node => {
         let childnode = node.childNodes[3];
+
         childnode.addEventListener("click", removeStorage);
       });
     } else {
@@ -188,9 +192,10 @@ function* removeOneElement(node) {
 
 // find each list item
 // remove storage and dom element.
-function removeStorage(e) {
-  localStorage.removeItem(`${e.path[1].childNodes[1].textContent}`);
-  e.path[1].remove();
+function removeStorage() {
+  let targetStorageName = styleLists.classList.contains("--active");
+  localStorage.removeItem(`${targetStorageName.value}`);
+  targetStorageName.remove();
   if (localStorage.length <= 1) {
     location.reload();
     message.focus();
@@ -198,10 +203,8 @@ function removeStorage(e) {
 }
 
 // media query for mobile
-function matchMobile() {
-  let watch = window.matchMedia("(max-width: 600px)");
-
-  if (watch.matches) {
+function setLogoView(value) {
+  if (value) {
     logo.innerText = "MD";
   } else {
     logo.innerText = "Morning Doodle";
@@ -321,12 +324,10 @@ function applyView(viewState) {
     showListStorage.classList.add("--addDimmer");
     showTileStorage.classList.remove("--addDimmer");
     itemsList.classList.replace("tileView", "listView");
-    footer.classList.add("--addFooterPosition");
   } else if (viewState === "false") {
     showListStorage.classList.remove("--addDimmer");
     showTileStorage.classList.add("--addDimmer");
     itemsList.classList.replace("listView", "tileView");
-    footer.classList.remove("--addFooterPosition");
   }
 }
 
@@ -346,5 +347,25 @@ function adjustToScrolled(wClass) {
   } else {
     wrapper.classList.remove(wClass);
     window.addEventListener("scroll", scrolled);
+    // observer
+    addStickyObserver();
   }
+}
+
+function mobileWatcher() {
+  let watch = window.matchMedia("(max-width: 600px)");
+  return watch.matches;
+}
+
+function addStickyObserver() {
+  function callback() {
+    let classAttrib = doodleHeader.classList.contains("--sticky--header");
+    console.log(classAttrib);
+    if (classAttrib) {
+      console.log("mutation activated");
+    }
+  }
+
+  let observer = new MutationObserver(callback);
+  observer.observe(wrapper, { subtree: true, childList: true });
 }
