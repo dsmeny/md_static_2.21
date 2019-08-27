@@ -19,6 +19,11 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .tileView li input {
+    width: 33px !important;
+    transform: translate(3vw, -4vh) !important;
+  }
 }
 
 @media screen and (min-width: 1280px) {
@@ -99,8 +104,9 @@
   }
 
   .tileView li input {
-    width: 2.4vw !important;
-    transform: translate(4vw, -1vh) !important;
+    width: 1.7vw !important;
+    transform: translate(3.6vw, -2vh) !important;
+    font-size: calc(23px + 0.2vw);
   }
 
   input:hover,

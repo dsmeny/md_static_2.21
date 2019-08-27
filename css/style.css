@@ -96,6 +96,7 @@ h2 {
 
 .--styleLists {
   font-family: var(--content-font);
+  color: var(--para-color);
   list-style-type: none;
   height: 4rem;
   display: flex;
@@ -285,8 +286,8 @@ input:focus {
 
 .tileView li input {
   grid-column: 6;
-  width: 3.4vw;
-  transform: translate(3vw, -1vh);
+  width: 28px;
+  transform: translate(1vw, -4vh);
 }
 
 .removeStorage {
