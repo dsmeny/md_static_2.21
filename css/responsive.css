@@ -98,6 +98,11 @@
     grid-column: 1 / span 4;
   }
 
+  .tileView li input {
+    width: 2.4vw !important;
+    transform: translate(4vw, -1vh) !important;
+  }
+
   input:hover,
   input:active {
     box-shadow: 3px 3px 10px rgba(100, 205, 255, 0.5);
