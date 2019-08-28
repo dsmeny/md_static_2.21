@@ -12,7 +12,8 @@ const dom = {
   showListStorage: q("#show__list__Storage"),
   logo: q(".doodle__title"),
   doodleButtons: q(".doodle__buttons"),
-  styleLists: q(".--styleLists")
+  styleLists: q(".--styleLists"),
+  footer: q("footer")
 };
 let {
   wrapper,
@@ -24,7 +25,8 @@ let {
   showListStorage,
   logo,
   doodleButtons,
-  styleLists
+  styleLists,
+  footer
 } = dom;
 
 let clicked = localStorage.getItem("clicked");
@@ -38,6 +40,7 @@ let mobileWatch = mobileWatcher();
 //***** ******/
 
 adjustToScrolled("--adjustWrapperHeight");
+addElementShadow(footer);
 
 //***** ******/
 // on resize
@@ -91,7 +94,7 @@ message.addEventListener("keydown", e => {
     doodleButtons.style.margin = "initial";
     logo.style.display = "initial";
 
-    // If value is not a space
+    // If value is not a space and not empty
     if (html !== " " && html !== "") {
       // Add to localStorage
       localStorage.setItem(`${html}`, html);
@@ -176,12 +179,8 @@ function* removeOneElement(node) {
   let clicklist = () => {
     if (itemsList.hasChildNodes()) {
       let nList = Array.from(itemsList.childNodes);
-
-      nList.forEach(node => {
-        let childnode = node.childNodes[3];
-
-        childnode.addEventListener("click", removeStorage);
-      });
+      let item = nList[0].childNodes[3];
+      item.addEventListener("click", removeStorage);
     } else {
       console.log("Nodes are not present.");
     }
@@ -192,10 +191,14 @@ function* removeOneElement(node) {
 
 // find each list item
 // remove storage and dom element.
-function removeStorage() {
-  let targetStorageName = styleLists.classList.contains("--active");
-  localStorage.removeItem(`${targetStorageName.value}`);
-  targetStorageName.remove();
+function removeStorage(e) {
+  let targetButton = e.target;
+  let targetElem = targetButton.parentElement;
+  targetElem.classList.add("--active");
+  console.log(`targetElem: ${targetElem}`);
+  console.log(typeof targetElem);
+  localStorage.removeItem(`${targetElem.firstElementChild.textContent}`);
+  targetElem.remove();
   if (localStorage.length <= 1) {
     location.reload();
     message.focus();
@@ -320,6 +323,7 @@ function setClickListeners() {
 
 function applyView(viewState) {
   // determine view defaults
+  console.log(`receiving viewState: ${viewState}`);
   if (viewState === "true") {
     showListStorage.classList.add("--addDimmer");
     showTileStorage.classList.remove("--addDimmer");
@@ -360,7 +364,7 @@ function mobileWatcher() {
 function addStickyObserver() {
   function callback() {
     let classAttrib = doodleHeader.classList.contains("--sticky--header");
-    console.log(classAttrib);
+    console.log(`classAttrib:contains Stickey header??:: ${classAttrib}`);
     if (classAttrib) {
       console.log("mutation activated");
     }
@@ -368,4 +372,14 @@ function addStickyObserver() {
 
   let observer = new MutationObserver(callback);
   observer.observe(wrapper, { subtree: true, childList: true });
+}
+
+function addElementShadow(elem) {
+  window.addEventListener("scroll", function(e) {
+    if (window.scrollY >= 5) {
+      elem.style.boxShadow = "0px -26px 47px rgba(0, 0, 0, 0.3)";
+    } else {
+      elem.style.boxShadow = "none";
+    }
+  });
 }

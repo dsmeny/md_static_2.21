@@ -6,7 +6,7 @@
   --title-font: "Amatic SC", cursive;
   --main-color: rgb(100, 205, 255);
   --para-color: rgba(48, 49, 49, 0.7);
-  --border-color: rgba(106, 118, 124, 0.3);
+  --border-color: rgba(6, 17, 22, 0.3);
   --weight-content: 100;
 }
 
@@ -25,6 +25,7 @@ body {
 .wrapper {
   height: 100%;
   margin: 0 auto;
+  background-color: #fff;
 }
 
 ul,
@@ -38,6 +39,7 @@ dir {
 
 .content {
   max-width: 100%;
+  transform: translateY(calc(16px + 1vh));
 }
 
 h2 {
@@ -79,7 +81,7 @@ h2 {
 }
 
 .--active {
-  color: red;
+  background-color: red !important;
 }
 
 .--addCentering {
@@ -194,7 +196,7 @@ input:focus {
   font-family: var(--title-font);
   font-weight: 100;
   color: var(--main-color);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--main-color);
   word-break: break-all;
   padding: 8px;
   border-radius: 40px;
@@ -276,6 +278,7 @@ input:focus {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  border-radius: 12px;
 }
 
 .tileView li label {
@@ -310,11 +313,11 @@ footer {
   text-align: center;
   font-weight: var(--weight-content);
   color: var(--para-color);
-  box-shadow: 3px -50px 89px rgba(0, 0, 0, 0.17);
   position: fixed;
   bottom: 0px;
   width: 100%;
   background-color: #fff;
+  line-height: 2rem;
 }
 
 .heart {
