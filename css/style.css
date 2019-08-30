@@ -80,20 +80,10 @@ h2 {
   outline: none;
 }
 
-.--active {
-  background-color: red !important;
-}
-
 .--addCentering {
   display: flex !important;
   justify-content: center;
   align-items: center;
-}
-
-.--styleInputs {
-  background-color: transparent;
-  border: none;
-  text-align: left;
 }
 
 .--styleLists {
@@ -135,21 +125,16 @@ h2 {
   height: 90vh !important;
 }
 
-.--addFlex {
-  display: flex !important;
-  margin-right: 12vw;
-}
-
 .--sticky--header {
   background-color: #fff !important;
   height: 4rem;
   transform: translate(0%, -10%) !important;
   margin: 0;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   left: 0;
   transform: none;
-  box-shadow: 1px 3px 720px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 1px 3px 720px rgba(0, 0, 0, 0.1) !important;
   animation-name: headerAnimation;
   animation-duration: 0.5s;
   animation-fill-mode: both;
@@ -221,6 +206,8 @@ input:focus {
   border-radius: 40px;
   color: var(--para-color);
   margin-top: 10px;
+  border: none;
+  background: none;
 }
 
 .--setMessage:nth-child(2) {
@@ -255,7 +242,7 @@ input:focus {
     color: rgba(68, 182, 144, 0);
   }
   to {
-    transform: translateY(5vh);
+    transform: translateY(15vh);
     height: 7vh;
     color: rgba(68, 182, 144, 0.8);
   }

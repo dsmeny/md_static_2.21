@@ -13,7 +13,8 @@ const dom = {
   logo: q(".doodle__title"),
   doodleButtons: q(".doodle__buttons"),
   styleLists: q(".--styleLists"),
-  footer: q("footer")
+  footer: q("footer"),
+  styleInputs: q(".--styleInputs")
 };
 let {
   wrapper,
@@ -26,7 +27,8 @@ let {
   logo,
   doodleButtons,
   styleLists,
-  footer
+  footer,
+  styleInputs
 } = dom;
 
 let clicked = localStorage.getItem("clicked");
@@ -54,14 +56,63 @@ window.addEventListener("resize", setLogoView(mobileWatch));
 // on keypress
 //***** ******/
 
-message.addEventListener("keydown", e => {
+message.addEventListener("keydown", messageClicked);
+message.addEventListener("click", handlePostClick);
+
+//***** ******/
+// on load
+//***** ******/
+
+window.addEventListener("DOMContentLoaded", e => {
+  // changes logo appearance
+  setLogoView(mobileWatch);
+  adjustToScrolled("--adjustWrapperHeight");
+
+  // If there is storage send to UI
+  if (storage.length > 1) {
+    let storageArray = Array.from(Object.keys(storage));
+    storageArray.forEach(store => {
+      if (store !== "clicked") {
+        sendToPage(store);
+      }
+    });
+
+    // set view state and add listeners
+    applyView(clicked);
+    setClickListeners();
+    //
+  } else {
+    insertEmptyMessage(doodleHeader);
+
+    // Set clicked state if storage is empty
+    if (localStorage.length < 1) {
+      localStorage.setItem("clicked", false);
+    }
+
+    showTileStorage.style.display = "none";
+    showListStorage.style.display = "none";
+
+    let watch = window.matchMedia("(max-width: 600px)");
+    if (watch.matches) {
+      doodleButtons.classList.add("--addFlex");
+      displaySvg(styleInputs);
+      message.removeEventListener("keydown", messageClicked);
+      message.blur();
+    } else if (doodleButtons.classList.contains("--addFlex")) {
+      doodleButtons.classList.remove("--addFlex");
+      message.focus();
+    }
+  }
+});
+
+// message click
+function messageClicked(e) {
   let messageInput = e.target;
 
   // header
   // message input
   messageInput.classList.add("--typed");
   messageInput.classList.add("--addAnimation");
-  messageInput.defaultValue = " ";
 
   // message input buttons
   ///////////
@@ -109,7 +160,6 @@ message.addEventListener("keydown", e => {
       }
 
       // send to the UI
-
       sendToPage(getStorageItem);
       applyView(clicked);
 
@@ -121,72 +171,29 @@ message.addEventListener("keydown", e => {
       //
     } else {
       resetInput();
-      message.value = defValue;
+      message.defaultValue = defValue;
     }
     resetInput();
   }
-});
+}
 
 // handle post click in message box
-message.addEventListener("click", e => {
-  if (defValue) message.value = "";
-  else message.value = defValue;
-});
-
-//***** ******/
-// on load
-//***** ******/
-
-window.addEventListener("DOMContentLoaded", e => {
-  // changes logo appearance
-  setLogoView(mobileWatch);
-  adjustToScrolled("--adjustWrapperHeight");
-
-  // If there is storage
-  if (storage.length > 1) {
-    let storageArray = Array.from(Object.keys(storage));
-    storageArray.forEach(store => {
-      if (store !== "clicked") {
-        sendToPage(store);
-      }
-    });
-
-    // set view state and add listeners
-    applyView(clicked);
-    setClickListeners();
-    //
-  } else {
-    doodleHeader.insertAdjacentHTML(
-      "afterend",
-      `<h2 class='--emptyStorage'>Make a nice doodle!</h2>`
-    );
-
-    showTileStorage.style.display = "none";
-    showListStorage.style.display = "none";
-    let watch = window.matchMedia("(max-width: 600px)");
-    if (watch.matches) {
-      doodleButtons.classList.add("--addFlex");
-    } else if (doodleButtons.classList.contains("--addFlex")) {
-      doodleButtons.classList.remove("--addFlex");
-    }
-  }
-
-  message.focus();
-});
+function handlePostClick(e) {
+  if (defValue) e.srcElement.value = "";
+  else e.srcElemen.defaultValue = defValue;
+}
 
 // remove buttons
 function* removeOneElement(node) {
-  let clicklist = () => {
-    if (itemsList.hasChildNodes()) {
-      let nList = Array.from(itemsList.childNodes);
-      let item = nList[0].childNodes[3];
+  let addClickEvent = () => {
+    if (node.hasChildNodes()) {
+      let nList = Array.from(node.childNodes);
+      let item = nList[3];
       item.addEventListener("click", removeStorage);
-    } else {
-      console.log("Nodes are not present.");
     }
   };
 
-  yield clicklist();
+  yield addClickEvent();
 }
 
 // find each list item
@@ -194,14 +201,15 @@ function* removeOneElement(node) {
 function removeStorage(e) {
   let targetButton = e.target;
   let targetElem = targetButton.parentElement;
-  targetElem.classList.add("--active");
-  console.log(`targetElem: ${targetElem}`);
-  console.log(typeof targetElem);
+
   localStorage.removeItem(`${targetElem.firstElementChild.textContent}`);
   targetElem.remove();
+
+  //if storage is empty
   if (localStorage.length <= 1) {
     location.reload();
     message.focus();
+    insertEmptyMessage(doodleHeader);
   }
 }
 
@@ -242,17 +250,20 @@ function* generateList(oneItem) {
     html = "";
 
   // show view depending on selected button
-
   if (oneItem !== "clicked") {
     generator = createList(oneItem);
     html += generator.next().value;
   }
 
   yield html;
-  itemsList = document.getElementById("itemsList");
+
+  // return the last member of the nodelist array
+  // itemsList = document.getElementById("itemsList");
+  // let mostRecentItem = itemsList.lastChild;
+  // mostRecentItem.id = Math.random;
 
   generator.next();
-  generator.next(itemsList);
+  generator.next(mostRecentItem);
 
   return;
 }
@@ -264,8 +275,6 @@ function displayList(elem) {
     view = "listView";
   } else if (clicked === "false") {
     view = "tileView";
-  } else {
-    console.log("undefined. view is not set.");
   }
 
   // insert the list
@@ -302,28 +311,27 @@ function setClickListeners() {
     }
   });
 
-  doodleButtons.addEventListener("touchstart", e => {
-    if (e.target === showListStorage) {
-      clicked = "true";
-      localStorage.setItem("clicked", true);
-      applyView(clicked);
-    } else if (e.target === showTileStorage) {
-      clicked = "false";
-      localStorage.setItem("clicked", false);
-      applyView(clicked);
-      adjustToScrolled("--adjustWrapperHeight");
-    }
-  });
+  // doodleButtons.addEventListener("touchstart", e => {
+  //   if (e.target === showListStorage) {
+  //     clicked = "true";
+  //     localStorage.setItem("clicked", true);
+  //     applyView(clicked);
+  //   } else if (e.target === showTileStorage) {
+  //     clicked = "false";
+  //     localStorage.setItem("clicked", false);
+  //     applyView(clicked);
+  //     adjustToScrolled("--adjustWrapperHeight");
+  //   }
+  // });
 
-  doodleHeader.addEventListener("touchstart", e => {
-    e.preventDefault();
-    doodleHeader.scrollTo = 0 + "px";
-  });
+  // doodleHeader.addEventListener("touchstart", e => {
+  //   e.preventDefault();
+  //   doodleHeader.scrollTo = 0 + "px";
+  // });
 }
 
 function applyView(viewState) {
   // determine view defaults
-  console.log(`receiving viewState: ${viewState}`);
   if (viewState === "true") {
     showListStorage.classList.add("--addDimmer");
     showTileStorage.classList.remove("--addDimmer");
@@ -333,6 +341,7 @@ function applyView(viewState) {
     showTileStorage.classList.add("--addDimmer");
     itemsList.classList.replace("listView", "tileView");
   }
+  message.focus();
 }
 
 function scrolled() {
@@ -364,7 +373,6 @@ function mobileWatcher() {
 function addStickyObserver() {
   function callback() {
     let classAttrib = doodleHeader.classList.contains("--sticky--header");
-    console.log(`classAttrib:contains Stickey header??:: ${classAttrib}`);
     if (classAttrib) {
       console.log("mutation activated");
     }
@@ -377,9 +385,49 @@ function addStickyObserver() {
 function addElementShadow(elem) {
   window.addEventListener("scroll", function(e) {
     if (window.scrollY >= 5) {
-      elem.style.boxShadow = "0px -26px 47px rgba(0, 0, 0, 0.3)";
+      elem.style.boxShadow = "0px -26px 47px rgba(0, 0, 0, 0.07)";
     } else {
       elem.style.boxShadow = "none";
     }
   });
+}
+
+function displaySvg(elem) {
+  let html = `<svg class="doodle__button" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 210 209") <g id="Artboard_1" data-name="Artboard 1"> <path class="cls-1"
+  d="M159.5,22A87.5,87.5,0,1,1,72,109.5,87.5,87.5,0,0,1,159.5,22ZM161,44V176m83-68M76,108m145,2L95,109" transform="translate(-55 -2)"></path></g></svg>`;
+
+  elem.insertAdjacentHTML("beforebegin", html);
+}
+
+///////////
+// FUNCTIONS
+//////////
+function chromeHack() {
+  let ua = window.navigator.vendor;
+  let regex = new RegExp(/Google Inc./);
+  let google = regex.test(ua);
+  console.log(typeof google);
+  let watch = window.matchMedia("(min-width:1000px)");
+
+  if (google && watch.matches) {
+    content.style.setProperty(
+      "transform",
+      "translateY(calc(16px + -6vh))",
+      "important"
+    );
+  } else {
+    content.style.setProperty(
+      "transform",
+      "translateY(calc(16px + -7vh))",
+      "important"
+    );
+  }
+}
+chromeHack();
+
+function insertEmptyMessage(element) {
+  element.insertAdjacentHTML(
+    "afterend",
+    `<h2 class='--emptyStorage'>Time to make a doodle!</h2>`
+  );
 }

@@ -1,3 +1,28 @@
+@media screen and (max-width: 599px) {
+  .--styleInputs {
+    background-color: transparent !important;
+    border: none !important;
+    text-align: left !important;
+  }
+
+  .--addFlex {
+    display: flex !important;
+  }
+
+  .cls-1 {
+    fill: none;
+    stroke: var(--main-color);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 8.41px;
+    fill-rule: evenodd;
+  }
+
+  .doodle__button {
+    transform: translate(-8px, 12px);
+  }
+}
+
 @media screen and (min-width: 600px) {
   .wrapper {
     display: grid;
@@ -69,6 +94,7 @@
   .content {
     grid-column: 1 / span 6 !important;
     grid-row: 3 / span4;
+    transform: translateY(calc(16px + -2vh)) !important;
   }
 
   .tileView {
@@ -84,6 +110,7 @@
   .--emptyStorage {
     grid-column: 2;
     margin-top: 5rem;
+    width: 300px !important;
   }
 }
 
@@ -131,5 +158,9 @@
 
   .tileView {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .--emptyStorage {
+    width: 100% !important;
   }
 }
