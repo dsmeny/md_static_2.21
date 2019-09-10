@@ -418,7 +418,7 @@ function chromeHack() {
   } else {
     content.style.setProperty(
       "transform",
-      "translateY(calc(16px + -7vh))",
+      "translateY(calc(16px + -18vh))",
       "important"
     );
   }

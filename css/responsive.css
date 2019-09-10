@@ -58,7 +58,7 @@
   }
 
   .--setMessage:nth-child(1) {
-    grid-row: 2 !important;
+    grid-row: 1 !important;
     width: 92% !important;
     grid-column: 2 / span 6 !important;
   }
@@ -73,7 +73,7 @@
 
   .--setMessage:nth-child(2),
   .--setMessage:nth-child(3) {
-    grid-row: 3 !important;
+    grid-row: 2 !important;
   }
 
   .doodle__message {
@@ -87,7 +87,7 @@
   .doodle__buttons {
     grid-template-columns: repeat(8, 1fr) !important;
     grid-template-rows: repeat(4, 1fr) !important;
-    transform: translateY(calc(100px + -8vh));
+    transform: translateY(calc(100px + -9vh));
     grid-column: 1 / span 4;
   }
 
@@ -103,13 +103,13 @@
   }
 
   .tileView li input {
-    width: 33px !important;
+    width: 30px !important;
     transform: translate(3vw, -4vh) !important;
   }
 
   .--emptyStorage {
     grid-column: 2;
-    margin-top: 5rem;
+    margin-top: 0rem;
     width: 300px !important;
   }
 }
