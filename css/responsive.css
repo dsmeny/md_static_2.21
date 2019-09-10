@@ -87,7 +87,7 @@
   .doodle__buttons {
     grid-template-columns: repeat(8, 1fr) !important;
     grid-template-rows: repeat(4, 1fr) !important;
-    transform: translateY(calc(100px + -9vh));
+    transform: translateY(calc(100px + -4vh));
     grid-column: 1 / span 4;
   }
 
