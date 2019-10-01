@@ -1,13 +1,14 @@
 'use strict';
 
+/* MD19_classHandler */
+
 // creating a class element
 class Elem {
    constructor(element, iterate){
     this.iterate = iterate;
     this.element = function(){
       if(iterate){
-        let nodes;  
-        nodes = document.querySelectorAll(element);  
+        let nodes = document.querySelectorAll(element);  
         return new Set(nodes);
 
       } else{
@@ -29,25 +30,54 @@ class Props extends Elem {
         global.addEventListener(event, function() {
           node.classList[`${val}`](rule);
         });
-      } else {
+      } else if(node.size > 1){
+          node.forEach(n => {
+          n.addEventListener(event, function() {
+               n.classList[`${val}`](rule);
+          });
+        });
+      } 
+      else {
          node.addEventListener(event, function() {
           this.classList[`${val}`](rule);
         });
       } 
       
     } else {
-       node.classList[`${val}`](rule);
+      if(node.size > 1){
+          node.forEach(n => {
+             n.classList[`${val}`](rule);
+          });
+      } else node.classList[`${val}`](rule);
     }
   }
 
   setAttrib(node, val, rule, {setListener = false, event = 'click', global = null} = {}){
      if(setListener){
-        node.addEventListener(event, function() {
-          this.setAttribute(val, rule);
-        });
-     } else {
-        node.setAttribute(val, rule);
-     }
+       if(global){
+            global.addEventListener(event, function() {
+              this.setAttribute(val, rule);
+          });
+        } else if(node.size > 1){
+            node.forEach(n => {
+              n.addEventListener(event, function() {
+                n.setAttribute(val, rule);
+            });
+          });
+        }
+        else {
+          node.addEventListener(event, function() {
+            this.setAttribute(val, rule);
+          });
+        }
+      }
+      else {
+        if(node.size > 1){
+            node.forEach(n => {
+             n.setAttribute(val, rule);
+          });
+        } else node.setAttribute(val, rule);
+      }
   }
 
   stylelist(node, val, rule, {setListener = false, event = 'click', global = null} = {}){
@@ -56,27 +86,38 @@ class Props extends Elem {
           global.addEventListener(event, function() {
             node.style[`${val}`] = rule;
         }); 
+      } else if(node.size > 1){
+        node.forEach(n => {
+          n.addEventListener(event, function() {
+            n.style[`${val}`] = rule;
+          });
+        });
       }
       else {
           node.addEventListener(event, function() {
           this.style[`${val}`] = rule;
       });
     }
-       
-    } else {
-        node.style[`${val}`] = rule;
+  } else {
+      if(node.size > 1){
+          node.forEach(n => {
+            n.style[`${val}`] = rule;
+          });
+      } else node.style[`${val}`] = rule;
     }
   }
 }
 
-// create nodelist && iterator
+// initializing constructs
 let newSet = new Props('.--styleLists', true);
 let anotherSet = new Props('h3', false);
 
+
+// destructuring Props methods
 let {classlist, stylelist, setAttrib} = new Props();
 
-// preparing for localStorage and state management
-// assigning element values.
+
+// preparing for state management
 function init(setObj){
   if(setObj.element.size > 1){
     let iterator = setObj.element[Symbol.iterator]();
@@ -103,7 +144,8 @@ let h3 = init(anotherSet);
 
 let mapElements = init(newSet);
 
-let list1 = mapElements.get('list1');
+// let list1 = mapElements.get('list1');
+// let list3 = mapElements.get('list3');
 
 
 // console.log(newSet.element.size);
@@ -112,14 +154,15 @@ let list1 = mapElements.get('list1');
 // classlist(list3, 'add', 'addBlue');
 // classlist(list1, 'add', 'makeFat', {event: 'load', global: this});
 // classlist(list1, 'add', 'makeItalic');
-classlist(h3, 'add', 'makeItalic', {setListener: true});
+// classlist(h3, 'add', 'makeItalic', {setListener: true});
 
-classlist(list1, 'add', 'addRed');
+// classlist(list1, 'add', 'addRed');
+classlist(mapElements, 'add', 'addRed');
 // classlist(list2, 'add', 'addGreen');
 
-// stylelist(list1, 'backgroundColor', 'lightgrey', {setListener: false});
+stylelist(mapElements, 'backgroundColor', 'lightgrey', {setListener: true});
 
-// setAttrib(list1, 'value', 'brad');
+setAttrib(mapElements, 'value', 'brad');
 
 // stylelist(list2, 'backgroundColor', 'lightgreen');
 // stylelist(list2, 'lineHeight', 4 + 'rem');
