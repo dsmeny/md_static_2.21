@@ -1,131 +1,77 @@
-'use strict';
+"use strict";
 
-/* MD19_classHandler */
+/* MD20_classHandler */
+
+"use strict";
 
 // creating a class element
 class Elem {
-   constructor(element, iterate){
+  constructor(element, iterate) {
     this.iterate = iterate;
-    this.element = function(){
-      if(iterate){
-        let nodes = document.querySelectorAll(element);  
+    this.element = (function() {
+      if (iterate) {
+        let nodes = document.querySelectorAll(element);
         return new Set(nodes);
-
-      } else{
-         return document.querySelector(element);
+      } else {
+        return document.querySelector(element);
       }
-    }();
+    })();
   }
 }
 
 // extending to class element properties and methods
 class Props extends Elem {
-  constructor(element, iterate){
-    super(element, iterate)
+  constructor(element, iterate) {
+    super(element, iterate);
   }
 
-  classlist(node, val, rule, {setListener = true, event = 'click', global = null} = {}) {
-    if(setListener){
-      if(global){
-        global.addEventListener(event, function() {
-          node.classList[`${val}`](rule);
-        });
-      } else if(node.size > 1){
-          node.forEach(n => {
-          n.addEventListener(event, function() {
-               n.classList[`${val}`](rule);
-          });
-        });
-      } 
-      else {
-         node.addEventListener(event, function() {
-          this.classList[`${val}`](rule);
-        });
-      } 
-      
-    } else {
-      if(node.size > 1){
-          node.forEach(n => {
-             n.classList[`${val}`](rule);
-          });
-      } else node.classList[`${val}`](rule);
-    }
-  }
+  method(pName, node, val, rule, { setListener = true, event = "click" } = {}) {
+    const eStyler = node => {
+      if (setListener && node.target.parentElement !== document.body) {
+        node = node.target.parentElement;
+      } else if (setListener && node.target) {
+        node = node.target;
+      } else node;
 
-  setAttrib(node, val, rule, {setListener = false, event = 'click', global = null} = {}){
-     if(setListener){
-       if(global){
-            global.addEventListener(event, function() {
-              this.setAttribute(val, rule);
-          });
-        } else if(node.size > 1){
-            node.forEach(n => {
-              n.addEventListener(event, function() {
-                n.setAttribute(val, rule);
-            });
-          });
-        }
-        else {
-          node.addEventListener(event, function() {
-            this.setAttribute(val, rule);
-          });
-        }
-      }
-      else {
-        if(node.size > 1){
-            node.forEach(n => {
-             n.setAttribute(val, rule);
-          });
-        } else node.setAttribute(val, rule);
-      }
-  }
+      if (pName === "classlist") {
+        node.classList[`${val}`](rule);
+      } else if (pName === "setAttribute") {
+        node.setAttribute(val, rule);
+      } else if (pName === "style") {
+        node.style[`${val}`] = rule;
+      } else console.log("pName has no matching value");
+    };
 
-  stylelist(node, val, rule, {setListener = false, event = 'click', global = null} = {}){
-    if(setListener){
-      if(global){
-          global.addEventListener(event, function() {
-            node.style[`${val}`] = rule;
-        }); 
-      } else if(node.size > 1){
+    if (setListener) {
+      if (node.size > 1) {
         node.forEach(n => {
-          n.addEventListener(event, function() {
-            n.style[`${val}`] = rule;
-          });
+          n.addEventListener(event, eStyler);
         });
+      } else {
+        node.addEventListener(event, eStyler);
       }
-      else {
-          node.addEventListener(event, function() {
-          this.style[`${val}`] = rule;
-      });
-    }
-  } else {
-      if(node.size > 1){
-          node.forEach(n => {
-            n.style[`${val}`] = rule;
-          });
-      } else node.style[`${val}`] = rule;
+    } else {
+      if (node.size > 1) {
+        node.forEach(n => {
+          eStyler(n);
+        });
+      } else eStyler(node);
     }
   }
 }
 
-// initializing constructs
-let newSet = new Props('.--styleLists', true);
-let anotherSet = new Props('h3', false);
-
-
 // destructuring Props methods
-let {classlist, stylelist, setAttrib} = new Props();
-
+let { method } = new Props();
 
 // preparing for state management
-function init(setObj){
-  if(setObj.element.size > 1){
+function init(setObj) {
+  if (setObj.element.size > 1) {
     let iterator = setObj.element[Symbol.iterator]();
 
     const newMap = new Map();
     let count = 1;
-    while(count <= setObj.element.size){
-     newMap.set(`list${count}`, iterator.next().value);
+    while (count <= setObj.element.size) {
+      newMap.set(`list${count}`, iterator.next().value);
       count++;
     }
     return newMap;
@@ -134,35 +80,31 @@ function init(setObj){
   }
 }
 
-
-// let list1 = iterator.next().value;
-// let list2 = iterator.next().value;
-// let list3 = iterator.next().value;
-// let list4 = iterator.next().value;
-// let h3 = anotherSet.element;
-let h3 = init(anotherSet);
-
+// initializing constructs
+let newSet = new Props(".--styleLists", true);
 let mapElements = init(newSet);
 
-// let list1 = mapElements.get('list1');
-// let list3 = mapElements.get('list3');
+let anotherSet = new Props("h3", false);
+let h3 = init(anotherSet);
+let body = document.querySelector("body");
 
+let list1 = mapElements.get("list1");
+let list2 = mapElements.get("list2");
+let list3 = mapElements.get("list3");
+let list4 = mapElements.get("list4");
 
-// console.log(newSet.element.size);
+// method('classlist', list4, 'add', 'addPurple');
+// method('classlist', list3, 'add', 'addBlue');
+// method('classlist', body, 'add', 'makeFat', {setListener: false});
+// method('classlist', list1, 'add', 'makeItalic');
+// method('classlist', h3, 'add', 'makeItalic');
 
-// classlist(list4, 'add', 'addPurple');
-// classlist(list3, 'add', 'addBlue');
-// classlist(list1, 'add', 'makeFat', {event: 'load', global: this});
-// classlist(list1, 'add', 'makeItalic');
-// classlist(h3, 'add', 'makeItalic', {setListener: true});
+// method('classlist', list1, 'add', 'addRed', {setListener: false});
+// method('classlist', mapElements, 'add', 'addRed');
+// method('classlist', list2, 'add', 'addGreen');
+// method('style', mapElements, 'backgroundColor', 'lightgrey', {setListener: true});
 
-// classlist(list1, 'add', 'addRed');
-classlist(mapElements, 'add', 'addRed');
-// classlist(list2, 'add', 'addGreen');
+// method('setAttribute', mapElements, 'value', 'brad', {setListener: false});
 
-stylelist(mapElements, 'backgroundColor', 'lightgrey', {setListener: true});
-
-setAttrib(mapElements, 'value', 'brad');
-
-// stylelist(list2, 'backgroundColor', 'lightgreen');
-// stylelist(list2, 'lineHeight', 4 + 'rem');
+// method('style', list2, 'backgroundColor', 'lightgreen');
+// method('style', list2, 'lineHeight', 4 + 'rem');
