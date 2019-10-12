@@ -15,18 +15,19 @@ message.addEventListener("keydown", function(e) {
   if (e.keyCode === 13) {
     let string = elem.value;
     let elemName = createKeyName(string);
-    let currentDoodle = addToDB(elemName, elem);
-    createNode(currentDoodle);
+    addToDB(elemName, string);
+    displayStorageNodes();
     elem.value = "";
   }
 });
 
-function createNode(text) {
+function createNode(text, key) {
   let node = document.createElement("figure");
   let button = document.createElement("button");
   let textNode = document.createTextNode(text);
   node.appendChild(textNode);
   document.getElementById("container").appendChild(node);
+  node.keyName = key;
   node.appendChild(button);
   node.classList.add("--styleFigure");
   button.classList.add("--styleButton");
@@ -37,7 +38,7 @@ function createNode(text) {
 function addRemoveStorageListener(node, event) {
   node.addEventListener(event, function(e) {
     e = e.target.parentNode;
-    let key = createKeyName(e.innerText);
+    let key = e.keyName;
     document.getElementById("container").removeChild(e);
     localStorage.removeItem(`${key}`);
   });
@@ -46,8 +47,7 @@ function addRemoveStorageListener(node, event) {
 function displayStorageNodes() {
   if (localStorage.length > 0) {
     for (let [key, value] of Object.entries(localStorage)) {
-      let currentItem = localStorage.getItem(key);
-      createNode(currentItem);
+      createNode(value, key);
     }
     document.querySelector("footer").style.display = "none";
   } else
@@ -56,15 +56,14 @@ function displayStorageNodes() {
     ).innerHTML = `<p class="--emptyStorage">Storage is currently empty</p>`;
 }
 
-function addToDB(name, elem) {
-  localStorage.setItem(`${name}`, elem.value);
-  return localStorage.getItem(`${name}`);
+function addToDB(name, stringVal) {
+  localStorage.setItem(`${name}`, stringVal);
 }
 
-function createKeyName(string) {
+function createKeyName(stringVal) {
   let el = "";
-  for (let i = 0; i <= Math.round(string.length / 4); i++) {
-    el += string[i];
+  for (let i = 0; i <= Math.round(stringVal.length / 4); i++) {
+    el += stringVal[i];
   }
   return el;
 }
