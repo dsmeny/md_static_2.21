@@ -1,10 +1,4 @@
 @media screen and (max-width: 599px) {
-  .--styleInputs {
-    background-color: transparent !important;
-    border: none !important;
-    text-align: left !important;
-  }
-
   .--addFlex {
     display: flex !important;
   }
@@ -31,11 +25,11 @@
     overflow: visible !important;
   }
 
-  .doodle {
+  .doodle__header {
     grid-column: 1 / span 6 !important;
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr 1fr !important;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     padding-right: 50px !important;
     padding-left: 50px !important;
     box-shadow: none !important;
@@ -57,70 +51,49 @@
     color: rgba(0, 0, 0, 0.6);
   }
 
-  .--setMessage:nth-child(1) {
-    grid-row: 1 !important;
-    width: 92% !important;
-    grid-column: 2 / span 6 !important;
+  .doodle__buttons {
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-rows: repeat(4, 1fr) !important;
+    transform: translateY(calc(100px + -4vh));
+    grid-column: 1 / span 4;
+    max-width: 100%;
   }
 
-  .--setMessage:nth-child(2) {
-    grid-column: 4 !important;
-  }
-
-  .--setMessage:nth-child(3) {
-    grid-column: 5 !important;
-  }
-
-  .--setMessage:nth-child(2),
-  .--setMessage:nth-child(3) {
-    grid-row: 2 !important;
-  }
-
-  .doodle__message {
+  .doodle__buttons__message {
     text-align: center;
     margin: 0 auto;
     border: 1px var(--main-color) !important;
     box-shadow: 1px 1px 3px rgba(100, 205, 255, 0.8);
+    grid-row: 1;
+    grid-column: 1 / span 4;
     transition: box-shadow 0.3s linear;
+    grid-column: 2 / span 2;
+    transition: box-shadow 0.3s linear;
+    width: 100%;
   }
 
-  .doodle__buttons {
-    grid-template-columns: repeat(8, 1fr) !important;
-    grid-template-rows: repeat(4, 1fr) !important;
-    transform: translateY(calc(100px + -4vh));
-    grid-column: 1 / span 4;
+  .doodle__buttons__views {
+    grid-row: 3;
+    grid-column: 2 / span 2;
+    display: flex;
+    justify-content: space-evenly;
   }
 
   .content {
     grid-column: 1 / span 6 !important;
-    grid-row: 3 / span4;
+    grid-row: 3 / span 4;
     transform: translateY(calc(16px + -2vh)) !important;
   }
 
-  .tileView {
+  .--tileView {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .tileView li input {
-    width: 30px !important;
-    transform: translate(3vw, -4vh) !important;
   }
 
   .--emptyStorage {
     grid-column: 2;
     margin-top: 0rem;
     width: 300px !important;
-  }
-}
-
-@media screen and (min-width: 1280px) {
-  .wrapper {
-    max-width: 1280px;
-  }
-  .doodle__header {
-    width: 1028px;
-    margin: 0 auto;
   }
 }
 
@@ -142,25 +115,30 @@
   }
 
   .--typed {
-    transform: translateY(4vh);
+    transform: translateY(0vh);
   }
 
-  .tileView li input {
-    width: 1.7vw !important;
-    transform: translate(3.6vw, -2vh) !important;
-    font-size: calc(23px + 0.2vw);
-  }
-
-  input:hover,
-  input:active {
+  .doodle__buttons__message:hover,
+  .doodle__buttons__message:active {
     box-shadow: 3px 3px 10px rgba(100, 205, 255, 0.5);
   }
 
-  .tileView {
+  .--tileView {
     grid-template-columns: repeat(3, 1fr);
   }
 
   .--emptyStorage {
     width: 100% !important;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .wrapper {
+    max-width: 1280px;
+    /* background-color: blue; */
+  }
+  .doodle__header {
+    width: 1028px;
+    margin: 0 auto;
   }
 }

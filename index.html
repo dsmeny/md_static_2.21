@@ -21,27 +21,28 @@
   </head>
   <body>
     <div class="wrapper">
-      <header class="doodle">
+      <header class="doodle__header">
         <h1 class="doodle__title">Morning Doodle</h1>
         <div class="doodle__buttons">
           <input
             type="text"
-            class="doodle__message --setMessage --styleInputs"
+            class="doodle__buttons__message"
             placeholder="Write something"
           />
-
-          <input
-            id="show__tile__Storage"
-            type="button"
-            class="doodle__items --setMessage --styleInputs"
-            value="tiles"
-          />
-          <input
-            id="show__list__Storage"
-            type="button"
-            class="doodle__items --setMessage --styleInputs"
-            value="lists"
-          />
+          <div class="doodle__buttons__views">
+            <input
+              id="show__list__Storage"
+              class="--styleInputs --addLinkHover --addDimmer"
+              type="button"
+              value="lists"
+            />
+            <input
+              id="show__tile__Storage"
+              class="--styleInputs --addLinkHover"
+              type="button"
+              value="tiles"
+            />
+          </div>
         </div>
       </header>
       <section id="container" class="content"></section>

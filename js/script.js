@@ -5,8 +5,9 @@ class Element {
 }
 
 window.addEventListener("DOMContentLoaded", displayStorageNodes);
+let nodeList = document.querySelectorAll(".--styleInputs");
 
-let message = new Element(".doodle__message").element;
+let message = new Element(".doodle__buttons__message").element;
 
 message.addEventListener("keydown", function(e) {
   let elem = e.target;
@@ -14,17 +15,17 @@ message.addEventListener("keydown", function(e) {
 
   if (e.keyCode === 13) {
     let string = elem.value;
-    let elemName = createKeyName(string);
-    addToDB(elemName, string);
-    displayStorageNodes();
+    addToDB(createKeyName(string), string);
+    addRemoveStorageMessage();
     elem.value = "";
   }
 });
 
-function createNode(text, key) {
+function createNode(key, value) {
   let node = document.createElement("figure");
   let button = document.createElement("button");
-  let textNode = document.createTextNode(text);
+  let textNode = document.createTextNode(value);
+
   node.appendChild(textNode);
   document.getElementById("container").appendChild(node);
   node.keyName = key;
@@ -41,23 +42,45 @@ function addRemoveStorageListener(node, event) {
     let key = e.keyName;
     document.getElementById("container").removeChild(e);
     localStorage.removeItem(`${key}`);
+    addRemoveStorageMessage();
   });
 }
 
 function displayStorageNodes() {
+  let key, value;
   if (localStorage.length > 0) {
-    for (let [key, value] of Object.entries(localStorage)) {
-      createNode(value, key);
+    for ([key, value] of Object.entries(localStorage)) {
+      createNode(key, value);
     }
     document.querySelector("footer").style.display = "none";
-  } else
-    document.getElementById(
-      "container"
-    ).innerHTML = `<p class="--emptyStorage">Storage is currently empty</p>`;
+  } else {
+    addRemoveStorageMessage();
+  }
 }
 
 function addToDB(name, stringVal) {
   localStorage.setItem(`${name}`, stringVal);
+  createNode(`${name}`, stringVal);
+}
+
+function addRemoveStorageMessage() {
+  if (localStorage.length > 0) {
+    document.querySelector(".--emptyStorage").style.display = "none";
+    setTileListListeners(nodeList);
+  } else {
+    document.getElementById(
+      "container"
+    ).innerHTML = `<p class="--emptyStorage">Storage is currently empty</p>`;
+    nodeList[0].style.display = "none";
+    nodeList[1].style.display = "none";
+  }
+}
+
+function setTileListListeners(nodelist) {
+  nodelist.forEach(node => {
+    node.style.display = "initial";
+    node.addEventListener("click", setFocus);
+  });
 }
 
 function createKeyName(stringVal) {
@@ -66,4 +89,15 @@ function createKeyName(stringVal) {
     el += stringVal[i];
   }
   return el;
+}
+
+function setFocus(e) {
+  let el = e.target;
+  if (el.previousElementSibling) {
+    el.classList.toggle("--addDimmer");
+    el.previousElementSibling.classList.toggle("--addDimmer");
+  } else {
+    el.classList.toggle("--addDimmer");
+    el.nextElementSibling.classList.toggle("--addDimmer");
+  }
 }
