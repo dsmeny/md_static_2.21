@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", displayStorageNodes);
 let nodeList = document.querySelectorAll(".--styleInputs");
 
 let message = new Element(".doodle__buttons__message").element;
+let container = new Element("#container").element;
 
 message.addEventListener("keydown", function(e) {
   let elem = e.target;
@@ -15,19 +16,26 @@ message.addEventListener("keydown", function(e) {
 
   if (e.keyCode === 13) {
     let string = elem.value;
-    addToDB(createKeyName(string), string);
-    addRemoveStorageMessage();
-    elem.value = "";
+    if (string === "") {
+      elem.classList.remove("--typed");
+    } else {
+      addToDB(string.substring(0, 3), string);
+      displayStorageNodes();
+      addRemoveStorageMessage();
+      elem.value = "";
+    }
   }
 });
 
-function createNode(key, value) {
+function createNode(obj) {
+  let [key, value] = obj;
   let node = document.createElement("figure");
   let button = document.createElement("button");
   let textNode = document.createTextNode(value);
 
   node.appendChild(textNode);
   document.getElementById("container").appendChild(node);
+
   node.keyName = key;
   node.appendChild(button);
   node.classList.add("--styleFigure");
@@ -47,11 +55,14 @@ function addRemoveStorageListener(node, event) {
 }
 
 function displayStorageNodes() {
-  let key, value;
+  let map = new Map();
   if (localStorage.length > 0) {
-    for ([key, value] of Object.entries(localStorage)) {
-      createNode(key, value);
+    for (var [key, value] of Object.entries(localStorage)) {
+      map.set(key, value);
     }
+    let iterator = map[Symbol.iterator]();
+    createNode(iterator.next().value);
+    setTileListListeners();
     document.querySelector("footer").style.display = "none";
   } else {
     addRemoveStorageMessage();
@@ -59,36 +70,38 @@ function displayStorageNodes() {
 }
 
 function addToDB(name, stringVal) {
-  localStorage.setItem(`${name}`, stringVal);
-  createNode(`${name}`, stringVal);
+  let keyName;
+  let item = localStorage.getItem(name);
+  if (item) {
+    keyName = `${name}_` + localStorage.length;
+  } else {
+    keyName = name;
+  }
+  localStorage.setItem(`${keyName}`, stringVal);
 }
 
 function addRemoveStorageMessage() {
   if (localStorage.length > 0) {
-    document.querySelector(".--emptyStorage").style.display = "none";
-    setTileListListeners(nodeList);
+    if (container.contains(document.querySelector(".--emptyStorage"))) {
+      document.querySelector(".--emptyStorage").style.display = "none";
+      document.querySelector("footer").style.display = "none";
+    }
+    setTileListListeners();
   } else {
     document.getElementById(
       "container"
     ).innerHTML = `<p class="--emptyStorage">Storage is currently empty</p>`;
+    document.querySelector("footer").style.display = "initial";
     nodeList[0].style.display = "none";
     nodeList[1].style.display = "none";
   }
 }
 
-function setTileListListeners(nodelist) {
-  nodelist.forEach(node => {
+function setTileListListeners() {
+  nodeList.forEach(node => {
     node.style.display = "initial";
     node.addEventListener("click", setFocus);
   });
-}
-
-function createKeyName(stringVal) {
-  let el = "";
-  for (let i = 0; i <= Math.round(stringVal.length / 4); i++) {
-    el += stringVal[i];
-  }
-  return el;
 }
 
 function setFocus(e) {
@@ -99,5 +112,13 @@ function setFocus(e) {
   } else {
     el.classList.toggle("--addDimmer");
     el.nextElementSibling.classList.toggle("--addDimmer");
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+  if (el.classList.contains("--addDimmer")) {
+    let attrib = el.getAttribute("id");
+    let regex = RegExp(/show__(? = tile)/);
+    if (regex.test(attrib)) console.log("show tile");
+    else console.log("show list");
   }
 }
