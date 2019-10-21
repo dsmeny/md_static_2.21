@@ -19,16 +19,15 @@ message.addEventListener("keydown", function(e) {
     if (string === "") {
       elem.classList.remove("--typed");
     } else {
-      addToDB(string.substring(0, 3), string);
-      displayStorageNodes();
+      let keyName = addToDB(string.substring(0, 3), string);
+      createNode(keyName, string);
       addRemoveStorageMessage();
       elem.value = "";
     }
   }
 });
 
-function createNode(obj) {
-  let [key, value] = obj;
+function createNode(key, value) {
   let node = document.createElement("figure");
   let button = document.createElement("button");
   let textNode = document.createTextNode(value);
@@ -55,13 +54,13 @@ function addRemoveStorageListener(node, event) {
 }
 
 function displayStorageNodes() {
-  let map = new Map();
+  // let map = new Map();
   if (localStorage.length > 0) {
     for (var [key, value] of Object.entries(localStorage)) {
-      map.set(key, value);
+      // let list = map.set(`${key}`, value);
+      // console.log(key, value);
+      createNode(key, value);
     }
-    let iterator = map[Symbol.iterator]();
-    createNode(iterator.next().value);
     setTileListListeners();
     document.querySelector("footer").style.display = "none";
   } else {
@@ -78,15 +77,19 @@ function addToDB(name, stringVal) {
     keyName = name;
   }
   localStorage.setItem(`${keyName}`, stringVal);
+  return keyName;
 }
 
 function addRemoveStorageMessage() {
+  let emptyStorage = document.querySelector(".--emptyStorage");
   if (localStorage.length > 0) {
-    if (container.contains(document.querySelector(".--emptyStorage"))) {
-      document.querySelector(".--emptyStorage").style.display = "none";
+    if (emptyStorage === null) {
+      return;
+    } else {
+      document.getElementById("container").removeChild(emptyStorage);
       document.querySelector("footer").style.display = "none";
+      setTileListListeners();
     }
-    setTileListListeners();
   } else {
     document.getElementById(
       "container"
@@ -105,6 +108,7 @@ function setTileListListeners() {
 }
 
 function setFocus(e) {
+  const nodes = document.getElementById("container").childNodes;
   let el = e.target;
   if (el.previousElementSibling) {
     el.classList.toggle("--addDimmer");
@@ -114,11 +118,20 @@ function setFocus(e) {
     el.nextElementSibling.classList.toggle("--addDimmer");
   }
 
-  /////////////////////////////////////////////////////////////////////////
+  // set view
   if (el.classList.contains("--addDimmer")) {
     let attrib = el.getAttribute("id");
-    let regex = RegExp(/show__(? = tile)/);
-    if (regex.test(attrib)) console.log("show tile");
-    else console.log("show list");
+    let regex = RegExp(/show__(?=tile)/);
+    if (regex.test(attrib)) {
+      nodes.forEach(n => {
+        n.classList.add("--tileView");
+        n.classList.remove("--listView");
+      });
+    } else {
+      nodes.forEach(n => {
+        n.classList.add("--listView");
+        n.classList.remove("--tileView");
+      });
+    }
   }
 }
