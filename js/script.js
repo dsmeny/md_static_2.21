@@ -22,6 +22,7 @@ message.addEventListener("keydown", function(e) {
       let keyName = addToDB(string.substring(0, 3), string);
       createNode(keyName, string);
       addRemoveStorageMessage();
+      setTileListListeners();
       elem.value = "";
     }
   }
@@ -88,7 +89,6 @@ function addRemoveStorageMessage() {
     } else {
       document.getElementById("container").removeChild(emptyStorage);
       document.querySelector("footer").style.display = "none";
-      setTileListListeners();
     }
   } else {
     document.getElementById(
@@ -104,11 +104,15 @@ function setTileListListeners() {
   nodeList.forEach(node => {
     node.style.display = "initial";
     node.addEventListener("click", setFocus);
+
+    // set default
+    if (node.classList.contains("--addDimmer")) {
+      setView(node);
+    }
   });
 }
 
 function setFocus(e) {
-  const nodes = document.getElementById("container").childNodes;
   let el = e.target;
   if (el.previousElementSibling) {
     el.classList.toggle("--addDimmer");
@@ -120,18 +124,23 @@ function setFocus(e) {
 
   // set view
   if (el.classList.contains("--addDimmer")) {
-    let attrib = el.getAttribute("id");
-    let regex = RegExp(/show__(?=tile)/);
-    if (regex.test(attrib)) {
-      nodes.forEach(n => {
-        n.classList.add("--tileView");
-        n.classList.remove("--listView");
-      });
-    } else {
-      nodes.forEach(n => {
-        n.classList.add("--listView");
-        n.classList.remove("--tileView");
-      });
-    }
+    setView(el);
+  }
+}
+
+function setView(el) {
+  const nodes = document.getElementById("container").childNodes;
+  let attrib = el.getAttribute("id");
+  let regex = RegExp(/show__(?=tile)/);
+  if (regex.test(attrib)) {
+    nodes.forEach(n => {
+      n.classList.add("--tileView");
+      n.classList.remove("--listView");
+    });
+  } else {
+    nodes.forEach(n => {
+      n.classList.add("--listView");
+      n.classList.remove("--tileView");
+    });
   }
 }
