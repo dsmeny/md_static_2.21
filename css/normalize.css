@@ -263,6 +263,13 @@ fieldset {
   padding: 0.35em 0.75em 0.625em;
 }
 
+figure {
+  margin-block-start: initial;
+  margin-block-end: initial;
+  margin-inline-start: initial;
+  margin-inline-end: initial;
+}
+
 /**
    * 1. Correct the text wrapping in Edge and IE.
    * 2. Correct the color inheritance from `fieldset` elements in IE.
@@ -282,6 +289,14 @@ legend {
 /**
    * Add the correct vertical alignment in Chrome, Firefox, and Opera.
    */
+
+p {
+  display: block;
+  margin-block-start: initial;
+  margin-block-end: initial;
+  margin-inline-start: initial;
+  margin-inline-end: initial;
+}
 
 progress {
   vertical-align: baseline;

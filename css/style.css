@@ -5,6 +5,23 @@
   --content-font: "Rubik", sans-serif;
   --title-font: "Amatic SC", cursive;
   --main-color: rgb(100, 205, 255);
+  --test-color: linear-gradient(
+    to top,
+    #ebedee,
+    #edeff2,
+    #f4eff4,
+    #fbf0f2,
+    #fff2ee
+  );
+
+  --test-header: linear-gradient(
+    to top,
+    #fff2ee,
+    #ffe5ca,
+    #ffdd9e,
+    #ffdb6d,
+    #ffdf33
+  );
   --para-color: rgba(48, 49, 49, 0.7);
   --border-color: rgba(6, 17, 22, 0.3);
   --weight-content: 100;
@@ -25,7 +42,6 @@ body {
 .wrapper {
   height: 100%;
   margin: 0 auto;
-  /* background-color: #fff; */
 }
 
 ul,
@@ -39,7 +55,7 @@ dir {
 
 .content {
   max-width: 100%;
-  transform: translateY(calc(16px + 1vh));
+  grid-column: 1 / span 3;
 }
 
 h2 {
@@ -51,27 +67,14 @@ h2 {
 }
 
 .doodle__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-  background: #fffc00; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #ffffff,
-    #fffc00
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #ffffff,
-    #fffc00
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-  height: 20vh;
   box-shadow: 1px 20px 20px rgba(0, 0, 0, 0.02);
   padding-right: 10px;
   padding-left: 10px;
   z-index: 999;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  height: 32vh;
 }
 
 .--moveToOrigin {
@@ -80,8 +83,16 @@ h2 {
   animation-fill-mode: both;
 }
 
+.--removeDisplay {
+  display: none !important;
+}
+
 .--setMessage {
   outline: none;
+}
+
+.--setMessageColumnTwo {
+  grid-column: 2 / span 3 !important;
 }
 
 .--addCentering {
@@ -107,16 +118,11 @@ h2 {
 }
 
 .--styleFigure {
-  font-family: var(--content-font);
-  color: var(--para-color);
   list-style-type: none;
-  height: 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding-right: 5vw;
   padding-left: 5vw;
   line-height: 1.5rem;
+  margin-bottom: 20px;
 }
 
 .--styleButton {
@@ -126,17 +132,38 @@ h2 {
   border-radius: 16px;
 }
 
-.--styleInputs {
-  background-color: transparent !important;
-  border: none;
-  text-align: left !important;
+.--addTileViewParagraph {
+  grid-row: 3;
+  grid-column: 1 / span 6;
+  text-align: left;
+}
+
+.--addDeleteButtonView {
+  grid-column: 6;
+  margin-top: 3vh;
+}
+
+.--addTileViewLikes {
+  grid-column: 5;
+  grid-row: 1;
+  margin-top: 3vh;
+}
+
+.--addListViewLikes {
+  margin-top: 0vh;
+}
+
+.para {
+  color: blue;
 }
 
 .--listView {
   font-family: var(--content-font);
-  position: relative;
-  top: 2vh;
-  width: 100%;
+  background-color: #f2f5f8;
+  height: 7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .--listView:nth-child(odd) {
@@ -156,6 +183,10 @@ h2 {
 
 .--adjustWrapperHeight {
   height: 90vh !important;
+}
+
+.--addCharcoal {
+  color: var(--para-color) !important;
 }
 
 .--sticky--header {
@@ -196,6 +227,7 @@ h2 {
 .doodle__title {
   font-family: "Barriecito", cursive;
   width: 30%;
+  grid-row: 3;
 }
 
 textarea:focus,
@@ -204,19 +236,12 @@ input:focus {
 }
 
 .doodle__buttons {
+  height: 18vh;
+  grid-column: 3 / span 4;
+  grid-row: 3;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
-  font-family: var(--content-font);
-  font-weight: 100;
-  width: 100%;
-  padding: 5px;
-  text-align: center;
-  border-radius: 40px;
-  color: var(--para-color);
-  margin-top: 10px;
-  border: none;
-  background: none;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
 }
 
 .doodle__buttons__message {
@@ -229,6 +254,17 @@ input:focus {
   padding: 8px;
   border-radius: 40px;
   background-color: #fff;
+  margin-top: 3vh;
+}
+
+.doodle__buttons__views {
+  grid-row: 3;
+  grid-column: 1 / span 3;
+  font-size: calc(16px + 0.5rem);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 22px;
 }
 
 @keyframes messageAnimation {
@@ -246,23 +282,18 @@ input:focus {
 }
 
 .--setMessage:nth-child(1) {
-  grid-row: 1;
-  grid-column: 1;
-  grid-column: 1 / span 2;
+  grid-row: 2;
+  grid-column: 1 / span 3;
   text-align: center;
 }
 
 .--emptyStorage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 7vh;
   font-family: var(--content-font);
-  width: 100%;
   animation-name: emptyStorageAnimation;
   animation-duration: 0.9s;
   animation-delay: 0.7s;
   animation-fill-mode: both;
+  text-align: center;
 }
 
 @keyframes emptyStorageAnimation {
@@ -272,17 +303,20 @@ input:focus {
     color: rgba(68, 182, 144, 0);
   }
   to {
-    transform: translateY(0vh);
+    transform: translateY(20vh);
     height: 7vh;
     color: rgba(68, 182, 144, 0.8);
   }
 }
 
+.--styleInputs {
+  background-color: transparent !important;
+  border: none;
+  text-align: left !important;
+}
+
 .--tileView {
   font-family: var(--content-font);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 50vh;
   background-color: yellow;
   text-align: center;
@@ -290,8 +324,9 @@ input:focus {
   color: var(--para-color);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   border-radius: 12px;
+  width: 84vw;
 }
 
 .removeStorage {
@@ -323,4 +358,17 @@ footer {
 
 .heart {
   color: red;
+}
+
+.likes {
+  height: calc(16px + 0.4vw);
+  width: calc(16px + 0.4vw);
+}
+
+.counter {
+  color: red;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-170%);
+  font-size: x-large;
 }

@@ -3,6 +3,12 @@
     display: flex !important;
   }
 
+  .--styleInputs {
+    background-color: transparent !important;
+    border: none;
+    text-align: left !important;
+  }
+
   .cls-1 {
     fill: none;
     stroke: var(--main-color);
@@ -14,6 +20,10 @@
 
   .doodle__button {
     transform: translate(-8px, 12px);
+  }
+
+  .doodle__button__view {
+    margin-top: 5px;
   }
 }
 
@@ -29,11 +39,17 @@
     grid-column: 1 / span 6 !important;
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr 1fr !important;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
     padding-right: 50px !important;
     padding-left: 50px !important;
     box-shadow: none !important;
     background: none !important;
+  }
+
+  .--setMessage:nth-child(1) {
+    grid-row: 1 !important;
+    width: 92% !important;
+    grid-column: 2 / span 6 !important;
   }
 
   .doodle__title {
@@ -52,11 +68,11 @@
   }
 
   .doodle__buttons {
-    grid-template-columns: repeat(4, 1fr) !important;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr) !important;
     grid-template-rows: repeat(4, 1fr) !important;
     transform: translateY(calc(100px + -4vh));
     grid-column: 1 / span 4;
-    max-width: 100%;
   }
 
   .doodle__buttons__message {
@@ -64,43 +80,25 @@
     margin: 0 auto;
     border: 1px var(--main-color) !important;
     box-shadow: 1px 1px 3px rgba(100, 205, 255, 0.8);
-    grid-row: 1;
-    grid-column: 1 / span 4;
     transition: box-shadow 0.3s linear;
-    grid-column: 2 / span 2;
-    transition: box-shadow 0.3s linear;
-    width: 100%;
   }
 
   .doodle__buttons__views {
     grid-row: 3;
-    grid-column: 2 / span 2;
+    grid-column: 3 / span 4 !important;
     display: flex;
     justify-content: space-evenly;
   }
 
-  .content {
-    grid-column: 1 / span 6 !important;
-    grid-row: 3 / span 4;
-    transform: translateY(calc(16px + -2vh)) !important;
-  }
-
   .--tileView {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .--emptyStorage {
-    grid-column: 2;
-    margin-top: 0rem;
-    width: 300px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
 @media screen and (min-width: 1000px) {
   .--sticky--header h1 {
     text-align: left !important;
-    grid-row: 1;
+    grid-row: 1 !important;
     z-index: 9999;
     margin-top: 0 !important;
   }
@@ -110,12 +108,28 @@
   }
 
   .--sticky--header div {
-    grid-row: 1;
-    grid-column: 2 / span 3;
+    grid-row: 1 !important;
+    grid-column: 2 / span 3 !important;
+  }
+
+  .--doodle__buttons {
+    height: initial !important;
   }
 
   .--typed {
-    transform: translateY(0vh);
+    transform: translateY(0vh) !important;
+  }
+
+  .--listView {
+    grid-column: 1 / span 6;
+  }
+
+  .content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-column: 1 / span 6 !important;
+    grid-row: 2 / span 3 !important;
   }
 
   .doodle__buttons__message:hover,
@@ -123,19 +137,18 @@
     box-shadow: 3px 3px 10px rgba(100, 205, 255, 0.5);
   }
 
-  .--tileView {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  /* .--tileView {
+    grid-template-columns: repeat(2, 1fr) !important;
+  } */
 
   .--emptyStorage {
-    width: 100% !important;
+    grid-column: 1 / span 2;
   }
 }
 
 @media screen and (min-width: 1280px) {
   .wrapper {
     max-width: 1280px;
-    /* background-color: blue; */
   }
   .doodle__header {
     width: 1028px;
