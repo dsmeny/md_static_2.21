@@ -16,7 +16,7 @@ let paraText, likeButton, deleteButton;
 
 // handle like listeners
 function handleLikeListener(elem) {
-  localStorage.setItem(`db_${elem.parentElement.keyName}`, 0);
+  localStorage.setItem(`db_${elem.parentElement.parentElement.keyName}`, 0);
   elem.addEventListener("click", likeTracker);
 }
 
@@ -40,26 +40,30 @@ message.addEventListener("keydown", function(e) {
 });
 
 function createNode(key, value) {
-  let node = document.createElement("figure");
+  const node = document.createElement("figure");
   document.getElementById("container").appendChild(node);
-  let button = document.createElement("button");
-  let text = document.createElement("p");
-  let textNode = document.createTextNode(value);
-  let likes = document.createElement("input");
+  const button = document.createElement("button");
+  const text = document.createElement("p");
+  const textNode = document.createTextNode(value);
+  const likes = document.createElement("input");
+  const buttonGroup = document.createElement("div");
 
   node.keyName = key;
   node.appendChild(text);
-  node.appendChild(likes);
-  node.appendChild(button);
+  node.appendChild(buttonGroup);
+  buttonGroup.appendChild(likes);
+  buttonGroup.appendChild(button);
+
   node.classList.add("--styleFigure");
 
   text.appendChild(textNode);
-  text.setAttribute("class", "para");
-  paraText = new Element(".para").element;
+  // text.setAttribute("class", "para");
+  // paraText = new Element(".para").element;
 
   likes.setAttribute("type", "image");
   likes.setAttribute("src", "/img/heart.svg");
   likes.classList.add("likes");
+  buttonGroup.classList.add("buttonGroup");
   likeButton = document.querySelector(".likes");
 
   button.classList.add("--styleButton");
@@ -71,7 +75,7 @@ function createNode(key, value) {
 
 function addRemoveStorageListener(node, event) {
   node.addEventListener(event, function(e) {
-    e = e.target.parentNode;
+    e = e.target.parentNode.parentNode;
     let key = e.keyName;
     document.getElementById("container").removeChild(e);
     localStorage.removeItem(`${key}`);
@@ -135,6 +139,14 @@ function setTileListListeners() {
     // set default
     if (node.classList.contains("--addDimmer")) {
       setView(node);
+      node.removeEventListener("click", setFocus);
+      if (node.classList.contains("--addLinkHover")) {
+        node.classList.remove("--addLinkHover");
+      }
+    } else {
+      if (!node.classList.contains("--addLinkHover")) {
+        node.classList.add("--addLinkHover");
+      }
     }
   });
 }
@@ -163,28 +175,35 @@ function setView(el) {
     nodes.forEach(n => {
       n.classList.add("--tileView");
       n.classList.remove("--listView");
+
+      n.childNodes[0].setAttribute("class", "--addTileViewParagraph");
+      n.childNodes[1].classList.add("--addTileViewLikes");
+      n.childNodes[1].classList.remove("--addListViewLikes");
+      n.childNodes[1].childNodes[1].classList.add("--addDeleteButtonView");
     });
-    paraText.setAttribute("class", "--addTileViewParagraph");
-    likeButton.classList.add("--addTileViewLikes");
-    likeButton.classList.remove("--addListViewLikes");
-    deleteButton.classList.add("--addDeleteButtonView");
   } else {
     nodes.forEach(n => {
       n.classList.add("--listView");
       n.classList.remove("--tileView");
+
+      n.childNodes[1].classList.remove("--addTileViewLikes");
+      n.childNodes[1].classList.add("--addListViewLikes");
     });
-    likeButton.classList.remove("--addTileViewLikes");
-    likeButton.classList.add("--addListViewLikes");
   }
 }
 
 function likeTracker(e) {
   let elem = e.target;
-  let count = localStorage.getItem(`db_${elem.parentElement.keyName}`);
+  let count = localStorage.getItem(
+    `db_${elem.parentElement.parentElement.keyName}`
+  );
   count = parseInt(count);
   if (count === 0) {
     count++;
-    localStorage.setItem(`db_${elem.parentElement.keyName}`, count);
+    localStorage.setItem(
+      `db_${elem.parentElement.parentElement.keyName}`,
+      count
+    );
   } else if (count > 0) {
     count--;
   }
@@ -232,28 +251,31 @@ function chromeHack() {
   let ua = window.navigator.vendor;
   let regex = new RegExp(/Google Inc./);
   let google = regex.test(ua);
-  let watch = window.matchMedia("(min-width:1000px)");
-  let mobileMatch = window.matchMedia("(max-width: 600px)");
+  let watch = window.matchMedia("(min-width:1000px && max-width: 1280)");
+  let mobileMatch = window.matchMedia(
+    "(min-width: 600px && max-width: 1000px)"
+  );
 
   if (google && watch.matches) {
     container.style.setProperty(
       "transform",
-      "translateY(calc(16px + -6vh))",
+      "translateY(calc(16px + -2vh))",
       "important"
     );
-  } else if (mobileMatch.matches) {
+  } else if (google && mobileMatch.matches) {
     container.style.setProperty(
       "transform",
-      "translate(calc(16px + -2vh))",
-      "important"
-    );
-  } else {
-    container.style.setProperty(
-      "transform",
-      "translateY(calc(16px + -12vh))",
+      "translateY(calc(16px + 2vh))",
       "important"
     );
   }
 }
 
-// --styleTileViewMobile
+// handles readonly tile/list view buttons
+let observer = new MutationObserver(() => {
+  if (localStorage.length > 0) {
+    setTileListListeners();
+  }
+});
+
+observer.observe(doodleViews, { subtree: true, attributes: true });

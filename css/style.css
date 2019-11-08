@@ -92,13 +92,14 @@ h2 {
 }
 
 .--setMessageColumnTwo {
-  grid-column: 2 / span 3 !important;
+  grid-column: 1 / span 4 !important;
 }
 
 .--addCentering {
-  display: flex !important;
+  /* display: flex !important;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+  grid-column: 1 / span 5 !important;
 }
 
 .--addLinkHover:hover {
@@ -119,10 +120,11 @@ h2 {
 
 .--styleFigure {
   list-style-type: none;
-  padding-right: 5vw;
-  padding-left: 5vw;
+  padding-right: 2vw;
+  padding-left: 2vw;
   line-height: 1.5rem;
   margin-bottom: 20px;
+  color: var(--para-color);
 }
 
 .--styleButton {
@@ -136,25 +138,32 @@ h2 {
   grid-row: 3;
   grid-column: 1 / span 6;
   text-align: left;
+  margin-left: 5px;
 }
 
 .--addDeleteButtonView {
-  grid-column: 6;
-  margin-top: 3vh;
+  outline: 2px solid red;
 }
 
 .--addTileViewLikes {
   grid-column: 5;
   grid-row: 1;
   margin-top: 3vh;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .--addListViewLikes {
-  margin-top: 0vh;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.para {
-  color: blue;
+.buttonGroup {
+  width: 70px;
+  height: 86px;
+  display: flex;
 }
 
 .--listView {
@@ -227,7 +236,7 @@ h2 {
 .doodle__title {
   font-family: "Barriecito", cursive;
   width: 30%;
-  grid-row: 3;
+  grid-row: 2;
 }
 
 textarea:focus,
@@ -237,11 +246,14 @@ input:focus {
 
 .doodle__buttons {
   height: 18vh;
-  grid-column: 3 / span 4;
-  grid-row: 3;
+  grid-column: 3 / span 5;
+  grid-row: 2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
+  margin: 0px auto;
+  width: 100%;
+  max-width: 100%;
 }
 
 .doodle__buttons__message {
@@ -255,6 +267,9 @@ input:focus {
   border-radius: 40px;
   background-color: #fff;
   margin-top: 3vh;
+  grid-row: 2;
+  grid-column: 1 / span 3;
+  text-align: center;
 }
 
 .doodle__buttons__views {
@@ -281,12 +296,6 @@ input:focus {
   grid-column: 1;
 }
 
-.--setMessage:nth-child(1) {
-  grid-row: 2;
-  grid-column: 1 / span 3;
-  text-align: center;
-}
-
 .--emptyStorage {
   font-family: var(--content-font);
   animation-name: emptyStorageAnimation;
@@ -303,7 +312,7 @@ input:focus {
     color: rgba(68, 182, 144, 0);
   }
   to {
-    transform: translateY(20vh);
+    transform: translateY(4vh);
     height: 7vh;
     color: rgba(68, 182, 144, 0.8);
   }
@@ -321,12 +330,10 @@ input:focus {
   background-color: yellow;
   text-align: center;
   margin: 10px;
-  color: var(--para-color);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
   border-radius: 12px;
-  width: 84vw;
 }
 
 .removeStorage {
