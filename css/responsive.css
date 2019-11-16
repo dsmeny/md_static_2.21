@@ -22,6 +22,11 @@
     transform: translate(-8px, 12px);
   }
 
+  .doodle__buttons {
+    grid-column: 1 / span 5 !important;
+    grid-row: 3 !important;
+  }
+
   .doodle__button__view {
     margin-top: 5px;
   }
@@ -38,8 +43,7 @@
   .doodle__header {
     grid-column: 1 / span 6 !important;
     display: grid !important;
-    grid-template-columns: 1fr 1fr 1fr 1fr !important;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr) !important;
     padding-right: 50px !important;
     padding-left: 50px !important;
     box-shadow: none !important;
@@ -70,15 +74,16 @@
 
   .doodle__buttons {
     grid-template-columns: repeat(8, 1fr) !important;
-    transform: translateY(calc(100px + -4vh));
+    transform: translateY(calc(100px + -4vh)) !important;
     grid-column: 1 / span 4 !important;
     height: 28vh !important;
   }
 
   .doodle__buttons__message {
     text-align: center;
-    margin: 0 auto;
     transition: box-shadow 0.3s linear;
+    grid-row: 4 !important;
+    grid-column: 2 / span 8 !important;
   }
 
   .doodle__buttons__views {
@@ -94,6 +99,18 @@
 
   .--tileView {
     grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  @keyframes messageAnimation {
+    from {
+      width: 0vw;
+      height: 0vh;
+    }
+    to {
+      background-color: #ffff;
+      border-radius: 0px;
+      height: 27vh;
+    }
   }
 }
 
@@ -114,6 +131,15 @@
     grid-column: 2 / span 3 !important;
   }
 
+  @keyframes doodleAnim {
+    from {
+      transform: translate(0vh, 0vw);
+    }
+    to {
+      transform: translate(-13vw, 0vh);
+    }
+  }
+
   .--doodle__buttons {
     height: initial !important;
   }
@@ -129,10 +155,11 @@
   .content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
+    grid-template-rows: repeat(3, 1fr);
     grid-column: 1 / span 6 !important;
     grid-row: 2 / span 3 !important;
     transform: translateY(calc(16px + 12vh)) !important;
+    grid-gap: 0px;
   }
 
   .doodle__buttons__message:hover,
@@ -149,15 +176,40 @@
 @media all and (min-width: 1320px) {
   .wrapper {
     max-width: 1420px;
+    grid-template-rows: repeat(6, 1fr) !important;
   }
   .doodle__header {
     width: 1028px;
     margin: 0 auto;
+    grid-row: 2 !important;
+  }
+
+  .sticky--header {
+    transform: translateX(-242px);
+  }
+
+  .sticky--header::before {
+    content: "MD";
+    font-size: 2rem;
+    margin-left: 1.5%;
+  }
+
+  .doodle__title {
+    margin-top: 0px !important;
+  }
+
+  .doodle__buttons__message {
+    grid-row: 2 !important;
+    grid-column: 1 / span 8 !important;
+  }
+
+  .doodle__buttons__views {
+    grid-row: 3 !important;
   }
 
   .content {
     grid-template-columns: repeat(3, 1fr);
-    transform: translateY(calc(16px + 25vh)) !important;
+    transform: translateY(calc(16px + 35vh)) !important;
   }
 
   .--emptyStorage {
@@ -165,7 +217,16 @@
     grid-column: 2;
   }
 
-  .doodle__buttons__message {
-    width: 52vw !important;
+  @keyframes messageAnimation {
+    from {
+      width: 0vw;
+      height: 0vh;
+    }
+    to {
+      background-color: #ffff;
+      border-radius: 0px;
+      width: 94vw;
+      height: 27vh;
+    }
   }
 }

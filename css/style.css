@@ -14,6 +14,11 @@
     #fff2ee
   );
 
+  body.noScroll {
+    /* ...or body.dialogShowing */
+    overflow: hidden;
+  }
+
   --test-header: linear-gradient(
     to top,
     #fff2ee,
@@ -64,6 +69,7 @@ h2 {
 
 ::placeholder {
   color: var(--main-color);
+  font-family: var(--title-font);
 }
 
 .doodle__header {
@@ -77,18 +83,35 @@ h2 {
   height: 32vh;
 }
 
-.--moveToOrigin {
-  animation-name: doodleAnim;
-  animation-duration: 1s;
-  animation-fill-mode: both;
+.sticky--header {
+  background-color: white !important;
+  height: 4rem !important;
+  display: flex !important;
+  width: 100% !important;
+  position: fixed !important;
+  top: 0 !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 1px 3px 720px rgba(0, 0, 0, 0.4) !important;
+  animation-name: headerAnimation !important;
+  animation-duration: 0.5s !important;
+  animation-fill-mode: both !important;
+}
+
+@keyframes headerAnimation {
+  0% {
+    height: 0rem;
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    height: 4rem;
+  }
 }
 
 .--removeDisplay {
   display: none !important;
-}
-
-.--setMessage {
-  outline: none;
 }
 
 .--setMessageColumnTwo {
@@ -96,9 +119,6 @@ h2 {
 }
 
 .--addCentering {
-  /* display: flex !important;
-  justify-content: center;
-  align-items: center; */
   grid-column: 1 / span 5 !important;
 }
 
@@ -132,6 +152,8 @@ h2 {
   height: 29px;
   border: 1px solid var(--border-color);
   border-radius: 16px;
+  background-color: transparent;
+  border-color: peachpuff;
 }
 
 .--addTileViewParagraph {
@@ -139,10 +161,6 @@ h2 {
   grid-column: 1 / span 6;
   text-align: left;
   margin-left: 5px;
-}
-
-.--addDeleteButtonView {
-  outline: 2px solid red;
 }
 
 .--addTileViewLikes {
@@ -169,7 +187,7 @@ h2 {
 .--listView {
   font-family: var(--content-font);
   background-color: #f2f5f8;
-  height: 7rem;
+  height: 12rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -180,10 +198,26 @@ h2 {
 }
 
 .--addAnimation {
+  font-family: var(--content-font);
+  color: var(--main-color);
+  font-weight: var(--weight-content);
   animation-name: messageAnimation;
   animation-duration: 1s;
   animation-fill-mode: both;
-  margin: 0 auto;
+}
+
+.gradient {
+  background: #ffff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    #fcfc79,
+    #ffff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #fcfc79,
+    #ffff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .--addDimmer {
@@ -198,21 +232,6 @@ h2 {
   color: var(--para-color) !important;
 }
 
-.--sticky--header {
-  background-color: #fff !important;
-  height: 4rem;
-  transform: translate(0%, -10%) !important;
-  margin: 0;
-  width: 100vw;
-  position: fixed;
-  left: 0;
-  transform: none;
-  box-shadow: 1px 3px 720px rgba(0, 0, 0, 0.1) !important;
-  animation-name: headerAnimation;
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
-}
-
 @keyframes headerAnimation {
   from {
     height: 0rem;
@@ -221,15 +240,6 @@ h2 {
   to {
     opacity: 1;
     height: 8rem;
-  }
-}
-
-@keyframes doodleAnim {
-  from {
-    transform: translateY(0vh);
-  }
-  to {
-    transform: translateY(-3vh);
   }
 }
 
@@ -251,14 +261,13 @@ input:focus {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  margin: 0px auto;
   width: 100%;
   max-width: 100%;
 }
 
 .doodle__buttons__message {
   font-size: calc(16px + 0.8rem);
-  font-family: var(--title-font);
+  font-family: var(--content-font);
   font-weight: 100;
   color: var(--main-color);
   border: 1px solid var(--main-color);
@@ -266,10 +275,9 @@ input:focus {
   padding: 8px;
   border-radius: 40px;
   background-color: #fff;
-  margin-top: 3vh;
+  text-align: center;
   grid-row: 2;
   grid-column: 1 / span 3;
-  text-align: center;
 }
 
 .doodle__buttons__views {
@@ -280,15 +288,6 @@ input:focus {
   justify-content: space-evenly;
   align-items: center;
   margin-top: 22px;
-}
-
-@keyframes messageAnimation {
-  from {
-    width: 40vw;
-  }
-  to {
-    width: 93vw;
-  }
 }
 
 .--setMessage:nth-child(2) {
@@ -343,12 +342,6 @@ input:focus {
   border: 1px solid var(--main-color);
   border-radius: 50px;
   font-weight: 500;
-}
-
-.--typed {
-  font-family: var(--content-font);
-  color: var(--main-color);
-  font-weight: var(--weight-content);
 }
 
 footer {

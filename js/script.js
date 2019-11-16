@@ -7,12 +7,20 @@ class Element {
 window.addEventListener("DOMContentLoaded", displayStorageNodes);
 let nodeList = document.querySelectorAll(".--styleInputs");
 
-let message = new Element(".doodle__buttons__message").element;
-let container = new Element("#container").element;
-let header = new Element(".doodle__header").element;
-let messageContainer = new Element(".doodle__buttons").element;
-let doodleViews = new Element(".doodle__buttons__views").element;
-let paraText, likeButton, deleteButton;
+let message = new Element(".doodle__buttons__message").element,
+  container = new Element("#container").element,
+  header = new Element(".doodle__header").element,
+  messageContainer = new Element(".doodle__buttons").element,
+  doodleViews = new Element(".doodle__buttons__views").element,
+  paraText,
+  canvas,
+  deleteButton,
+  title = document.querySelector(".doodle__title"),
+  wrapper = document.querySelector(".wrapper"),
+  phone = window.matchMedia("(max-width: 600px)"),
+  mobile = window.matchMedia("(max-width: 1000px)"),
+  desktop = window.matchMedia("(max-width:1319px)"),
+  lgScreen = window.matchMedia("(min-width:1320px)");
 
 // handle like listeners
 function handleLikeListener(elem) {
@@ -20,14 +28,60 @@ function handleLikeListener(elem) {
   elem.addEventListener("click", likeTracker);
 }
 
+function likeTracker(e) {
+  let elem = e.target;
+  let count = localStorage.getItem(
+    `db_${elem.parentElement.parentElement.keyName}`
+  );
+  count = parseInt(count);
+  if (count === 0) {
+    count++;
+    localStorage.setItem(
+      `db_${elem.parentElement.parentElement.keyName}`,
+      count
+    );
+  } else if (count > 0) {
+    count--;
+  }
+  elem.parentNode.insertAdjacentHTML(
+    "afterbegin",
+    `<span class="counter">${count}</span>`
+  );
+}
+
+function ifFocus() {
+  if (document.hasFocus()) console.log("has focus");
+  else console.log("no focus");
+}
+
+ifFocus();
+
+// scroll event for sticky header
+// removes scroll choppiness
+
+window.addEventListener("scroll", scrolled);
+
+function scrolled() {
+  if (window.scrollY > 50) {
+    header.classList.add("sticky--header");
+  } else {
+    header.classList.remove("sticky--header");
+  }
+}
+
+window.addEventListener("scroll", scrolled);
+
 message.addEventListener("keydown", function(e) {
   let elem = e.target;
   typeMessage(e, elem);
+  if (localStorage.length === 0) {
+    document.querySelector(".--emptyStorage").style.display = "none";
+  }
 
   if (e.keyCode === 13) {
     let string = elem.value;
     if (string === "") {
-      elem.classList.remove("--typed");
+      elem.classList.remove("--addAnimation");
     } else {
       let keyName = addToDB(string.substring(0, 3), string);
       createNode(keyName, string);
@@ -45,32 +99,50 @@ function createNode(key, value) {
   const button = document.createElement("button");
   const text = document.createElement("p");
   const textNode = document.createTextNode(value);
-  const likes = document.createElement("input");
   const buttonGroup = document.createElement("div");
+  const canvasElem = document.createElement("canvas");
 
   node.keyName = key;
   node.appendChild(text);
   node.appendChild(buttonGroup);
-  buttonGroup.appendChild(likes);
+  buttonGroup.appendChild(canvasElem);
   buttonGroup.appendChild(button);
 
   node.classList.add("--styleFigure");
 
   text.appendChild(textNode);
-  // text.setAttribute("class", "para");
-  // paraText = new Element(".para").element;
 
-  likes.setAttribute("type", "image");
-  likes.setAttribute("src", "/img/heart.svg");
-  likes.classList.add("likes");
+  canvasElem.setAttribute("id", "canvas");
+  canvas = document.getElementById("canvas");
   buttonGroup.classList.add("buttonGroup");
-  likeButton = document.querySelector(".likes");
 
   button.classList.add("--styleButton");
+  button.textContent = "-";
   deleteButton = document.querySelector(".--styleButton");
 
+  paintImageSprite(canvas, "/img/heart.svg");
   addRemoveStorageListener(button, "click");
-  handleLikeListener(likes);
+  handleLikeListener(canvas);
+}
+
+function paintImageSprite(elem, source) {
+  elem.style.width = 46 + "px";
+  elem.style.height = 30 + "px";
+  const ctx = elem.getContext("2d");
+
+  const image = new Image(140, 200);
+  image.onload = drawImageActualSize;
+
+  image.src = source;
+
+  function drawImageActualSize() {
+    canvas.width = this.naturalWidth;
+    canvas.height = this.naturalHeight;
+
+    ctx.drawImage(this, 0, 0, this.width, this.height);
+    ctx.fillStyle = "blue";
+    ctx.fill();
+  }
 }
 
 function addRemoveStorageListener(node, event) {
@@ -192,31 +264,9 @@ function setView(el) {
   }
 }
 
-function likeTracker(e) {
-  let elem = e.target;
-  let count = localStorage.getItem(
-    `db_${elem.parentElement.parentElement.keyName}`
-  );
-  count = parseInt(count);
-  if (count === 0) {
-    count++;
-    localStorage.setItem(
-      `db_${elem.parentElement.parentElement.keyName}`,
-      count
-    );
-  } else if (count > 0) {
-    count--;
-  }
-  elem.parentNode.insertAdjacentHTML(
-    "afterbegin",
-    `<span class="counter">${count}</span>`
-  );
-}
-
 // observer for typed messages
 function typeMessage(listener, target) {
   if (listener.composed) {
-    header.classList.add("--moveToOrigin");
     header.firstElementChild.classList.add("--removeDisplay");
   }
 
@@ -231,7 +281,6 @@ function typeMessage(listener, target) {
 
   target.classList.add("--styleInputs");
   target.classList.add("--addCharcoal");
-  target.classList.add("--typed");
   target.classList.add("--addAnimation");
 }
 
@@ -241,34 +290,59 @@ function resetMessage() {
   doodleViews.style.display = "flex";
   messageContainer.classList.remove("--addCentering");
   message.classList.remove("--styleInputs");
-  message.classList.remove("--typed");
   message.classList.remove("--addAnimation");
 }
 
-chromeHack();
+window.addEventListener("resize", logo);
+window.addEventListener("load", logo);
 
-function chromeHack() {
-  let ua = window.navigator.vendor;
-  let regex = new RegExp(/Google Inc./);
-  let google = regex.test(ua);
-  let watch = window.matchMedia("(min-width:1000px && max-width: 1280)");
-  let mobileMatch = window.matchMedia(
-    "(min-width: 600px && max-width: 1000px)"
-  );
+// observer for sticky header responsive message positioning
+let responsiveTitleSpacing = new MutationObserver(logo);
 
-  if (google && watch.matches) {
-    container.style.setProperty(
-      "transform",
-      "translateY(calc(16px + -2vh))",
-      "important"
-    );
-  } else if (google && mobileMatch.matches) {
-    container.style.setProperty(
-      "transform",
-      "translateY(calc(16px + 2vh))",
-      "important"
-    );
+responsiveTitleSpacing.observe(header, {
+  subtree: true,
+  attributes: true
+});
+
+function logo() {
+  if (phone.matches) {
+    title.textContent = "MD";
+    title.style.marginTop = "-1vh";
+
+    if (header.classList.contains("sticky--header")) {
+      messageContainer.style.transform = "translateX(-5vw)";
+    } else messageContainer.style.transform = "none";
+
+    setVerticalPosition(container, -2);
+    // wrapper.style.backgroundColor = "yellow";
+  } else if (mobile.matches) {
+    if (header.classList.contains("sticky--header")) {
+      title.textContent = "MD";
+      // before.style.display = "none";
+    } else {
+      title.textContent = "Morning Doodle";
+    }
+    title.style.marginTop = "11vh";
+    setVerticalPosition(container, 8);
+    // wrapper.style.backgroundColor = "blue";
+  } else if (desktop.matches) {
+    title.textContent = "Morning Doodle";
+    setVerticalPosition(container, 17);
+    // wrapper.style.backgroundColor = "red";
+  } else if (lgScreen.matches) {
+    title.textContent = "Morning Doodle";
+    setVerticalPosition(container, 35);
+
+    // wrapper.classList.add("gradient");
   }
+}
+
+function setVerticalPosition(element, position) {
+  element.style.setProperty(
+    "transform",
+    `translateY(calc(16px + ${position}vh))`,
+    "important"
+  );
 }
 
 // handles readonly tile/list view buttons
